@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 // Load User model
-const User = require("../models/Users");
+const User = require("../models/users.model");
 
 // GET request 
 // Getting all the users
@@ -16,15 +16,14 @@ router.get("/", function(req, res) {
 	})
 });
 
-// NOTE: Below functions are just sample to show you API endpoints working, for the assignment you may need to edit them
-
 // POST request 
 // Add a user to db
 router.post("/register", (req, res) => {
     const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        date: req.body.date
+        password: req.body.password,
+        role: req.body.role
     });
 
     newUser.save()
@@ -48,7 +47,7 @@ router.post("/login", (req, res) => {
 				error: "Email not found",
 			});
         }
-        else{
+        else {
             res.send("Email Found");
             return user;
         }
