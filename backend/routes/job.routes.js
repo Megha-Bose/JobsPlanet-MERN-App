@@ -42,5 +42,14 @@ router.post("/add_job", (req, res) => {
         });
 });
 
+// DELETE request
+// Delete a job from the db
+router.delete('/:id', (req,res) => {
+    Job.findById(req.params.id).then(job => 
+        job.remove().then(() => res.json({success: true}))
+    )
+    .catch(err => res.status(404).json({success: false}));
+});
+
 module.exports = router;
 

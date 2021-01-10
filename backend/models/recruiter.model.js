@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const name = require('./name.model')
 
 // Schema
 const recruiterSchema = new Schema({
@@ -11,7 +10,7 @@ const recruiterSchema = new Schema({
         index: true
     },
     name: {
-        type: name.schema,
+        type: String,
         required: true
     },
     phone_number: {

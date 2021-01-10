@@ -37,5 +37,14 @@ router.post("/add_application", (req, res) => {
         });
 });
 
+// DELETE request
+// Delete an application from the db
+router.delete('/:id', (req,res) => {
+    Application.findById(req.params.id).then(application => 
+        application.remove().then(() => res.json({success: true}))
+    )
+    .catch(err => res.status(404).json({success: false}));
+});
+
 module.exports = router;
 

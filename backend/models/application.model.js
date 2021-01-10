@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const name = require('./name.model')
 
 const applicationSchema = new Schema({
     jobId: {

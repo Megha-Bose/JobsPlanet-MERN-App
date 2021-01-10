@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const name = require('./name.model')
 
 const roles = [
 	'recruiter', 'applicant'
@@ -9,7 +8,7 @@ const roles = [
 // Schema
 const userSchema = new Schema({
 	name: {
-		type: name.schema,
+		type: String,
 		required: true
 	},
 	email: {

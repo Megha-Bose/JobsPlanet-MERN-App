@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const name = require('./name.model')
 const education = require('./education.model')
 
 // Schema
@@ -13,7 +12,7 @@ const applicantSchema = new Schema({
         index: true
     },
     name: {
-        type: name.schema,
+        type: String,
         required: true
     },
     education: {
