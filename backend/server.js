@@ -15,10 +15,17 @@ const cors = require('cors');
 // translate between objects in code and the representation of those objects in MongoDB
 const mongoose = require('mongoose');
 
+const passport = require("passport");
+
 const app = express();
 
 const PORT = 4000;
 const DB_NAME = "JobsPlanet"
+
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
 
 // routes
 var testAPIRouter = require("./routes/testAPI");

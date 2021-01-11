@@ -13,14 +13,13 @@ export default class NavBar extends Component {
     render() {
         return (
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="/"><b>JobsPlanet</b></Navbar.Brand>
+                <Navbar.Brand href="/"><i className="material-icons">work</i><b> JobsPlanet</b></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         <Nav.Link href="/">Home</Nav.Link>
-                        <Nav.Link href="/users">Users</Nav.Link>
-                        <Nav.Link href="/register">Register</Nav.Link>
                         <Nav.Link href="/profile">My Profile</Nav.Link>
+                        <Nav.Link href="/dashboard">Dashboard</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

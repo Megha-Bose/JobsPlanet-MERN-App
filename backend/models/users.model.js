@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
-const roles = [
-	'recruiter', 'applicant'
-]
   
 // Schema
 const userSchema = new Schema({
@@ -25,8 +21,9 @@ const userSchema = new Schema({
 	},
 	role: {
 		type: String,
-		default: 'applicant',
-		enum: roles
+		required: true,
+		enum: ['applicant', 'recruiter'],
+		default: 'applicant'
 	},
 	date:{
 		type: Date,
