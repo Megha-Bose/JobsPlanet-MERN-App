@@ -35,7 +35,7 @@ class Profile extends Component {
         if(userRole == 'applicant') {
             UserDetails = 
             <ul>
-                <li>DP: {user.profile_image}</li>
+                {/* <li>DP: {user.profile_image}</li> */}
                 <li>Email: {user.email}</li>
                 <li>Education: {user.education}</li>
                 <li>Skills: 
@@ -45,7 +45,7 @@ class Profile extends Component {
                         ))}
                     </ul>
                 </li>
-                <li>Resume: {user.resume}</li>
+                {/* <li>Resume: {user.resume}</li> */}
             </ul>
         }
         else if(userRole == 'recruiter') {

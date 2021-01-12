@@ -18,6 +18,14 @@ class EditProfile extends Component {
         this.state = {
             userdetails: [], 
             name: "",
+            email: "",
+            password: "",
+            bio: "",
+            role: "",
+            resume: "",
+            phone_number: NaN,
+            skills: [],
+            skillsstring: "",
             errors: {}
         };
     }
@@ -31,7 +39,6 @@ class EditProfile extends Component {
                     name: response.data.name,
                     email: response.data.email,
                     password: response.data.password,
-                    password2: response.data.password2,
                     role: response.data.role,
                     phone_number: response.data.phone_number,
                     bio: response.data.bio,
@@ -61,7 +68,7 @@ class EditProfile extends Component {
         e.preventDefault();
         const { user } = this.props.auth;
         const euser = this.state;
-        euser.skills = euser.skills.split(',');
+        euser.skills = this.state.skillsstring.split(',');
         const editedUser = {
             name: euser.name,
             email: euser.email,
@@ -84,7 +91,7 @@ class EditProfile extends Component {
             })
         // to refresh
         this.props.history.push("/profile");
-        this.props.history.push("#");
+        this.props.history.push("/editprofile");
         this.props.history.goBack();
     };
 
@@ -92,6 +99,7 @@ class EditProfile extends Component {
         const user = this.state;
         const { errors } = this.state;
         const userRole = user.role;
+        user.skillsstring = user.skills.toString()
         let EditUserDetails;
         if(userRole == 'applicant') {
             EditUserDetails = 
@@ -127,20 +135,6 @@ class EditProfile extends Component {
                     <span className="red-text">{errors.email}</span>
                 </div>
                 <div className="input-field col s12">
-                    <label htmlFor="password">Password</label><br></br>
-                    <input
-                        onChange={this.onChange}
-                        value={user.password}
-                        error={errors.password}
-                        id="password"
-                        type="password"
-                        className={classnames("", {
-                            invalid: errors.password
-                        })}
-                    />
-                    <span className="red-text">{errors.password}</span>
-                </div>
-                <div className="input-field col s12">
                     <label htmlFor="education">Education</label><br></br>
                     <input
                         onChange={this.onChange}
@@ -153,12 +147,12 @@ class EditProfile extends Component {
                     <label htmlFor="skills">Skills</label><br></br>
                     <input
                         onChange={this.onChange}
-                        value={user.skills}
+                        value={user.skillsstring}
                         id="skills"
                         type="text"
                     />
                 </div>
-                <div className="input-field col s12">
+                {/* <div className="input-field col s12">
                     <label htmlFor="resume">Resume</label><br></br>
                     <input
                         onChange={this.onChange}
@@ -166,7 +160,7 @@ class EditProfile extends Component {
                         id="resume"
                         type="text"
                     />
-                </div>
+                </div> */}
                 <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                     <button
                         style={{
@@ -233,20 +227,6 @@ class EditProfile extends Component {
                         })}
                     />
                     <span className="red-text">{errors.email}</span>
-                </div>
-                <div className="input-field col s12">
-                    <label htmlFor="password">Password</label><br></br>
-                    <input
-                        onChange={this.onChange}
-                        value={user.password}
-                        error={errors.password}
-                        id="password"
-                        type="password"
-                        className={classnames("", {
-                            invalid: errors.password
-                        })}
-                    />
-                    <span className="red-text">{errors.password}</span>
                 </div>
                 <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                     <button

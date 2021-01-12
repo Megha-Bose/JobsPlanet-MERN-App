@@ -18,6 +18,8 @@ import EditProfile from './components/Users/EditProfile'
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/Users/Dashboard";
 
+document.body.style = 'background: #D5D5D5;';
+
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
   // Set auth token header auth
