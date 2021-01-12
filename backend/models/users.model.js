@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
+const education = require('./education.model')
   
 // Schema
 const userSchema = new Schema({
@@ -28,7 +30,32 @@ const userSchema = new Schema({
 	date:{
 		type: Date,
 		default: Date.now
-	}
+	},
+	rating: {
+        type: Number,
+        default: 5
+	},
+	profile_image: {
+        type: String,
+        // default: 'default-profile-image.jpg'
+    },
+	//recruiter
+	phone_number: {
+        type: Number
+    },
+    bio: {
+        type: String,
+	},
+	// applicant
+	education: {
+        type: [education.schema]
+    },
+    skills: {
+        type: [String]
+    },
+    resume: {
+        type: String
+    }
 });
 
 module.exports = User = mongoose.model("User", userSchema);

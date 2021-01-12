@@ -23,6 +23,14 @@ router.get("/", function(req, res) {
 	})
 });
 
+// Getting one user
+router.get("/:id", function(req, res) {
+    User.findById(req.params.id).then(user => 
+        res.json(user)
+    )
+    .catch(err => console.log(err));
+});
+
 // POST request 
 // Add a user to db
 router.post("/register", (req, res) => {
@@ -41,7 +49,9 @@ router.post("/register", (req, res) => {
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
-            role: req.body.role
+            role: req.body.role,
+            phone_number: req.body.phone_number,
+            skills: req.body.skills
         });
         
         // Hash password before saving in database
@@ -63,23 +73,21 @@ router.post("/register", (req, res) => {
     });
 });
 
-// router.post("/register", (req, res) => {
-//     const newUser = new User({
-//         name: req.body.name,
-//         email: req.body.email,
-//         password: req.body.password,
-//         role: req.body.role
-//     });
-
-//     newUser.save()
-//         .then(user => {
-//             res.status(200).json(user);
-//         })
-//         .catch(err => {
-//             res.status(400).send(err);
-//         });
-// });
-
+// PUT Request
+// Edit User Details
+router.route('/edit_profile/:id').put((req, res, next) => {
+    User.findByIdAndUpdate(req.params.id, {
+      $set: req.body
+    }, (error, data) => {
+      if (error) {
+        return next(error);
+        console.log(error)
+      } else {
+        res.json(data)
+        console.log('Student updated successfully !')
+      }
+    })
+})
 
 
 // POST request 
@@ -147,6 +155,13 @@ router.post("/login", (req, res) => {
 //         }
 // 	});
 // });
+
+router.delete('/del_user/:id', (req,res) => {
+    User.findById(req.params.id).then(user => 
+        user.remove().then(() => res.json({success: true}))
+    )
+    .catch(err => res.status(404).json({success: false}));
+});
 
 module.exports = router;
 

@@ -44,7 +44,7 @@ router.post("/add_job", (req, res) => {
 
 // DELETE request
 // Delete a job from the db
-router.delete('/:id', (req,res) => {
+router.delete('/del_job/:id', (req,res) => {
     Job.findById(req.params.id).then(job => 
         job.remove().then(() => res.json({success: true}))
     )

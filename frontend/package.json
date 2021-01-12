@@ -17,6 +17,7 @@
     "react-bootstrap": "^1.4.3",
     "react-dom": "^16.12.0",
     "react-dropdown-input": "^0.1.11",
+    "react-papaparse": "^3.11.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.3.1",
