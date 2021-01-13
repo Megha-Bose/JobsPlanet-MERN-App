@@ -27,6 +27,14 @@ const jobSchema = new Schema({
         type: Number,
         required: true
     },
+    maxpos: {
+        type: Number,
+        required: true
+    },
+    maxapp: {
+        type: Number,
+        default: 5
+    },
     address: {
         type: String,
         required: true

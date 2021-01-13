@@ -4,7 +4,6 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 class EditProfile extends Component {
@@ -42,7 +41,6 @@ class EditProfile extends Component {
                     role: response.data.role,
                     phone_number: response.data.phone_number,
                     bio: response.data.bio,
-                    education: response.data.education,
                     resume: response.data.resume,
                     skills: response.data.skills
                 });
@@ -77,7 +75,6 @@ class EditProfile extends Component {
             role: euser.role,
             phone_number: euser.phone_number,
             bio: euser.bio,
-            education: euser.education,
             resume: euser.resume,
             skills: euser.skills
         };
@@ -133,15 +130,6 @@ class EditProfile extends Component {
                         })}
                     />
                     <span className="red-text">{errors.email}</span>
-                </div>
-                <div className="input-field col s12">
-                    <label htmlFor="education">Education</label><br></br>
-                    <input
-                        onChange={this.onChange}
-                        value={user.education}
-                        id="education"
-                        type="text"
-                    />
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="skills">Skills</label><br></br>

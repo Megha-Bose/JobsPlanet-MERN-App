@@ -17,6 +17,7 @@ import Profile from './components/Users/Profile'
 import EditProfile from './components/Users/EditProfile'
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/Users/Dashboard";
+import AddEducation from "./components/Applicant/AddEducation";
 
 document.body.style = 'background: #D5D5D5;';
 
@@ -54,6 +55,7 @@ function App() {
               <PrivateRoute path="/dashboard" exact component={Dashboard} />
               <PrivateRoute path="/profile" exact component={Profile} />
               <PrivateRoute path="/editprofile" exact component={EditProfile} />
+              <PrivateRoute path="/addeducation" exact component={AddEducation} />
           </Switch>
         </div>
       </Router>

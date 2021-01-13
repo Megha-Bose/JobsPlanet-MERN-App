@@ -23,6 +23,12 @@ class Dashboard extends Component {
                             <span style={{ fontFamily: "monospace" }}><b>JobsPlanet</b></span>
                             </p>
                         </h6>
+                        <ul>
+                            <li><a href="/profile">My Profile</a></li>
+                            <li><a href="#">View Jobs</a></li>
+                            <li><a href="#">My Applications</a></li>
+                        </ul>
+                        <br></br>
                         <button
                             style={{
                             width: "150px",
