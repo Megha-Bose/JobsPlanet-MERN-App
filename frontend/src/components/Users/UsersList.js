@@ -41,9 +41,6 @@ class UsersList extends Component {
     }
 
     sortChange(){
-/**
- *      Note that this is sorting only at front-end.
- */
         var array = this.state.users;
         var flag = this.state.sortName;
         array.sort(function(a, b) {

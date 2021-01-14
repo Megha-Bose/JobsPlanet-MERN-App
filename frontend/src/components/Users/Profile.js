@@ -120,7 +120,7 @@ class Profile extends Component {
         // to refresh
         this.state.showform = !this.state.showform;
         this.props.history.push("/profile");
-        this.props.history.push("/profile");
+        this.props.history.push("/");
         this.props.history.goBack();
     }
 
@@ -257,7 +257,7 @@ class Profile extends Component {
         else if(userRole == 'recruiter') {
             UserDetails = 
             <ul>
-                <li>DP: {user.profile_image}</li>
+                {/* <li>DP: {user.profile_image}</li> */}
                 <li>Bio: {user.bio}</li>
                 <li>Email: {user.email}</li>
                 <li>Contact No.: {user.phone_number}</li>

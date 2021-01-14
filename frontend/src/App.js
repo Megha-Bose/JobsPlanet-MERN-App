@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
@@ -18,6 +18,8 @@ import EditProfile from './components/Users/EditProfile'
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/Users/Dashboard";
 import AddEducation from "./components/Applicant/AddEducation";
+import CreateJob from "./components/Recruiter/CreateJob";
+import MyActiveJobs from "./components/Recruiter/MyActiveJobs";
 
 document.body.style = 'background: #D5D5D5;';
 
@@ -56,6 +58,8 @@ function App() {
               <PrivateRoute path="/profile" exact component={Profile} />
               <PrivateRoute path="/editprofile" exact component={EditProfile} />
               <PrivateRoute path="/addeducation" exact component={AddEducation} />
+              <PrivateRoute path="/addJob" exact component={CreateJob} />
+              <PrivateRoute path="/viewMyActiveJobs" exact component={MyActiveJobs} />
           </Switch>
         </div>
       </Router>

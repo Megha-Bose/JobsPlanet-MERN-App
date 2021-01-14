@@ -7,7 +7,6 @@ const keys = require("../config/keys");
 // Load input validation
 const validateRegisterInput = require("../validations/register");
 const validateLoginInput = require("../validations/login");
-const validateEditProfileInput = require("../validations/editProfile");
 
 // Load User model
 const User = require("../models/users.model");
@@ -77,12 +76,6 @@ router.post("/register", (req, res) => {
 // PUT Request
 // Edit User Details
 router.route('/edit_profile/:id').put((req, res, next) => {
-    // Form validation
-    const { errors, isValid } = validateEditProfileInput(req.body);
-    // Check validation
-    if (!isValid) {
-        return res.status(400).json(errors);
-    }
     User.findByIdAndUpdate(req.params.id, {
       $set: req.body
     }, (error, data) => {

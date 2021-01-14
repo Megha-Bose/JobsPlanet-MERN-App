@@ -41,7 +41,8 @@ class Register extends Component {
     };
     onSubmit = e => {
         e.preventDefault();
-        this.state.skills = this.state.skills.split(',');
+        if(this.state.role == "applicant")
+            this.state.skills = this.state.skills.split(',');
         const newUser = {
             name: this.state.name,
             email: this.state.email,

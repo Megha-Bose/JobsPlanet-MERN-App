@@ -5,55 +5,54 @@ const jobSchema = new Schema({
     recruiter: {
         type: Schema.Types.ObjectId,
         ref: 'Recruiter',
-        required: true
+        //required: true
     },
     title: {
         type: String,
-        required: true
+        //required: true
     },
     description: {
         type: String,
-        required: true
     },
     type: {
         type: String,
-        required: true
+        //required: true
     },
     duration: {
         type: Number,
-        required: true
+        //required: true
     },
     salary: {
         type: Number,
-        required: true
     },
-    maxpos: {
+    app: {
         type: Number,
-        required: true
+        default: 0
     },
-    maxapp: {
+    appmax: {
         type: Number,
-        default: 5
     },
     address: {
         type: String,
-        required: true
+        //required: true
     },
     skills: {
         type: [String],
-        required: true
+        //required: true
     },
     rating: {
         type: Number,
-        default: 5
+        //default: 5
+    },
+    posmax: {
+        type: Number,
     },
     dateOfPost: {
-		type: Date,
-		default: Date.now
+		type: Date
     },
     deadline:{
 		type: Date,
-		required: false
+		//required: true
 	}
 });
 

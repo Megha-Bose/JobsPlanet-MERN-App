@@ -4,7 +4,6 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import classnames from "classnames";
 
 class EditProfile extends Component {
     onLogoutClick = e => {
@@ -25,7 +24,8 @@ class EditProfile extends Component {
             phone_number: NaN,
             skills: [],
             skillsstring: "",
-            errors: {}
+            nameError: "",
+            emailError: ""
         };
     }
 
@@ -49,6 +49,26 @@ class EditProfile extends Component {
                  console.log(error);
              })
     }
+
+    validate = () => {
+        let nameError = "";
+        let emailError = "";
+    
+        if (!this.state.name) {
+          nameError = "Name cannot be blank";
+        }
+    
+        if (!this.state.email.includes("@")) {
+          emailError = "Invalid email";
+        }
+    
+        if (emailError || nameError) {
+          this.setState({ emailError, nameError });
+          return false;
+        }
+    
+        return true;
+    };
 
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
@@ -78,23 +98,25 @@ class EditProfile extends Component {
             resume: euser.resume,
             skills: euser.skills
         };
-        axios
-            .put('http://localhost:4000/user/edit_profile/' + user.id, editedUser)
-            .then(response => {
-                console.log(editedUser);
-            })
-            .catch(function(error) {
-                console.log(error);
-            })
-        // to refresh
-        this.props.history.push("/profile");
-        this.props.history.push("/editprofile");
-        this.props.history.goBack();
+        const isValid = this.validate();
+        if (isValid) {
+            axios
+                .put('http://localhost:4000/user/edit_profile/' + user.id, editedUser)
+                .then(response => {
+                    console.log(editedUser);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+            // to refresh
+            this.props.history.push("/profile");
+            this.props.history.push("/profile");
+            this.props.history.goBack();
+        }
     };
 
     render() {
         const user = this.state;
-        const { errors } = this.state;
         const userRole = user.role;
         user.skillsstring = user.skills.toString()
         let EditUserDetails;
@@ -106,30 +128,24 @@ class EditProfile extends Component {
                     <input
                         onChange={this.onChange}
                         value={user.name}
-                        error={errors.name}
                         id="name"
                         type="text"
-                        className={classnames("", {
-                            invalid: errors.name
-                            })}className={classnames("", {
-                            invalid: errors.name
-                        })}
                     />
-                    <span className="red-text">{errors.name}</span>
+                    <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.nameError}
+                    </div>
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="email">Email</label><br></br>
                     <input
                         onChange={this.onChange}
                         value={user.email}
-                        error={errors.email}
                         id="email"
                         type="email"
-                        className={classnames("", {
-                            invalid: errors.email
-                        })}
                     />
-                    <span className="red-text">{errors.email}</span>
+                    <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.emailError}
+                    </div>
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="skills">Skills</label><br></br>
@@ -140,15 +156,6 @@ class EditProfile extends Component {
                         type="text"
                     />
                 </div>
-                {/* <div className="input-field col s12">
-                    <label htmlFor="resume">Resume</label><br></br>
-                    <input
-                        onChange={this.onChange}
-                        value={user.resume}
-                        id="resume"
-                        type="text"
-                    />
-                </div> */}
                 <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                     <button
                         style={{
@@ -173,16 +180,12 @@ class EditProfile extends Component {
                     <input
                         onChange={this.onChange}
                         value={user.name}
-                        error={errors.name}
                         id="name"
                         type="text"
-                        className={classnames("", {
-                            invalid: errors.name
-                            })}className={classnames("", {
-                            invalid: errors.name
-                        })}
                     />
-                    <span className="red-text">{errors.name}</span>
+                    <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.nameError}
+                    </div>
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="bio">Bio.</label><br></br>
@@ -207,14 +210,12 @@ class EditProfile extends Component {
                     <input
                         onChange={this.onChange}
                         value={user.email}
-                        error={errors.email}
                         id="email"
                         type="email"
-                        className={classnames("", {
-                            invalid: errors.email
-                        })}
                     />
-                    <span className="red-text">{errors.email}</span>
+                    <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.emailError}
+                    </div>
                 </div>
                 <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                     <button

@@ -26,6 +26,8 @@ router.post("/add_job", (req, res) => {
         type: req.body.type,
         duration: req.body.duration,
         salary: req.body.salary,
+        appmax: req.body.appmax,
+        posmax: req.body.posmax,
         address: req.body.address,
         skills: req.body.skills,
         rating: req.body.rating,
@@ -42,6 +44,21 @@ router.post("/add_job", (req, res) => {
         });
 });
 
+// PUT Request
+// Edit Job Details
+router.put('/edit_job/:id', (req, res) => {
+    Job.findByIdAndUpdate(req.params.id, {
+      $set: req.body
+    }, (error, data) => {
+        if (error) {
+            console.log(error);
+        } else {
+            res.json(data)
+            console.log('Job updated successfully !')
+        }
+    })
+})
+
 // DELETE request
 // Delete a job from the db
 router.delete('/del_job/:id', (req,res) => {
@@ -52,4 +69,3 @@ router.delete('/del_job/:id', (req,res) => {
 });
 
 module.exports = router;
-

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -57,9 +56,9 @@ class AddEducation extends Component {
             startdate: this.state.startdate,
             enddate: this.state.enddate
         };
-        if(!newEducation.startdate)
+        if(!newEducation.startdate || newEducation.school == "" || newEducation.degree == "")
         {
-            alert("Enter Start Date!");
+            alert("School, Degree and Start Date are required!");
         }
         else{
             this.state.userDetails.education.push(newEducation);
