@@ -10,6 +10,7 @@ class CreateJob extends Component {
         this.state = {
             userdetails: [],
             recruiter: [],
+            recruiterName: "",
             title: "",
             titleError: "",
             description: "",
@@ -23,12 +24,15 @@ class CreateJob extends Component {
             // default max no of pos and app = 10
             posmax: 10,
             appmax: 10,
+            numpos: 0,
+            numapp: 0,
             app: 0,
             address: "",
             addressError: "",
             skills: [],
             skillstr: "",
-            rating: 5,
+            rating: 0,
+            numrate: 0,
             dateOfPost: new Date(),
             // default 100 days from now
             deadline: new Date(new Date().getTime()+(100*24*60*60*1000))
@@ -54,23 +58,23 @@ class CreateJob extends Component {
         let addressError = "";
 
     
-        if (this.state.title == "") {
+        if (this.state.title === "") {
           titleError = "Title cannot be blank";
         }
 
-        if (this.state.type == "") {
+        if (this.state.type === "") {
             typeError = "Select type of job";
         }
 
-        if (this.state.duration == -1) {
+        if (this.state.duration === -1) {
             durationError = "Select duration of job";
         }
 
-        if (this.state.salary == -1) {
+        if (this.state.salary === -1) {
             salaryError = "Enter Salary";
         }
     
-        if (this.state.address == "") {
+        if (this.state.address === "") {
             addressError = "Address cannot be blank";
         }
     
@@ -99,12 +103,13 @@ class CreateJob extends Component {
         e.preventDefault();
         let euser = this.state;
         euser.skills = this.state.skillstr.split(',');
-        if(euser.durationstr != "")
+        if(euser.durationstr !== "")
         {
             euser.duration = parseInt(euser.durationstr);
         }
         const newJob = {
             recruiter: this.state.userdetails,
+            recruiterName: this.state.userdetails.name,
             title: euser.title,
             description: euser.description,
             type: euser.type,
@@ -112,10 +117,13 @@ class CreateJob extends Component {
             salary: euser.salary,
             posmax: euser.posmax,
             appmax: euser.appmax,
+            numpos: euser.numpos,
+            numapp: euser.numapp,
             app: euser.app,
             address: euser.address,
             skills: euser.skills,
             rating: euser.rating,
+            numrate: euser.numrate,
             dateOfPost: euser.dateOfPost,
             deadline: euser.deadline
         };
@@ -142,7 +150,7 @@ class CreateJob extends Component {
         const user = this.state;
         const userRole = this.state.userdetails.role;
         let AddJob;
-        if(userRole == "recruiter") {
+        if(userRole === "recruiter") {
             AddJob = 
             <form noValidate onSubmit={this.onSubmit}>
                 <div className="input-field col s12">
@@ -192,6 +200,7 @@ class CreateJob extends Component {
                         value={user.salary}
                         id="salary"
                         type="number"
+                        min="-1"
                     />
                     <div style={{ fontSize: 12, color: "red" }}>
                         {this.state.salaryError}

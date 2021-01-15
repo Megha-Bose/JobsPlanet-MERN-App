@@ -56,13 +56,10 @@ class Profile extends Component {
                 console.log(error);
             })
         // to refresh
-        this.props.history.push("/profile");
-        this.props.history.push("/profile");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     editEducation(ed) {
-        const { user } = this.props.auth;
         this.state.showform = !this.state.showform;
         this.state.editing = ed._id;
         console.log(this.state.showform);
@@ -82,20 +79,15 @@ class Profile extends Component {
         }
         
         // to refresh
-        this.props.history.push("/profile");
-        this.props.history.push("/profile");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     onBack() {
-        const { user } = this.props.auth;
         this.state.showform = !this.state.showform;
         this.state.editing = "";
         
         // to refresh
-        this.props.history.push("/profile");
-        this.props.history.push("/profile");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     editEducationSubmit(ed) {
@@ -103,9 +95,9 @@ class Profile extends Component {
         const idToChange = ed._id;
         this.state.editing = "";
         const ind = this.state.userdetails.education.findIndex(x => x._id === idToChange)
-        if(this.state.school != "")
+        if(this.state.school !== "")
             this.state.userdetails.education[ind].school = this.state.school;
-        if(this.state.degree != "")
+        if(this.state.degree !== "")
             this.state.userdetails.education[ind].degree = this.state.degree;
         this.state.userdetails.education[ind].startdate = this.state.startdate;
         this.state.userdetails.education[ind].enddate = this.state.enddate;
@@ -119,16 +111,14 @@ class Profile extends Component {
             })
         // to refresh
         this.state.showform = !this.state.showform;
-        this.props.history.push("/profile");
-        this.props.history.push("/");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     render() {
         const user = this.state.userdetails;
         const userRole = user.role;
         let UserDetails;
-        if(userRole == 'applicant') {
+        if(userRole === 'applicant') {
             UserDetails = 
             <div>
                  <ul>
@@ -160,7 +150,7 @@ class Profile extends Component {
                                     </ul>
                                     
                                     <div>
-                                        { !this.state.showform || ed._id != this.state.editing? 
+                                        { !this.state.showform || ed._id !== this.state.editing? 
                                             <div>
                                                 <Tooltip title="Delete Above Education" aria-label="delete">
                                                 <button
@@ -254,7 +244,7 @@ class Profile extends Component {
                 </ul>
             </div>
         }
-        else if(userRole == 'recruiter') {
+        else if(userRole === 'recruiter') {
             UserDetails = 
             <ul>
                 {/* <li>DP: {user.profile_image}</li> */}

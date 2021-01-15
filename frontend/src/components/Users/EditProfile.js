@@ -108,10 +108,7 @@ class EditProfile extends Component {
                 .catch(function(error) {
                     console.log(error);
                 })
-            // to refresh
-            this.props.history.push("/profile");
-            this.props.history.push("/profile");
-            this.props.history.goBack();
+            window.location.reload();
         }
     };
 
@@ -120,7 +117,7 @@ class EditProfile extends Component {
         const userRole = user.role;
         user.skillsstring = user.skills.toString()
         let EditUserDetails;
-        if(userRole == 'applicant') {
+        if(userRole === 'applicant') {
             EditUserDetails = 
             <form noValidate onSubmit={this.onSubmit}>
                 <div className="input-field col s12">
@@ -172,7 +169,7 @@ class EditProfile extends Component {
                 </div>
             </form>
         }
-        else if(userRole == 'recruiter') {
+        else if(userRole === 'recruiter') {
             EditUserDetails = 
             <form noValidate onSubmit={this.onSubmit}>
                 <div className="input-field col s12">

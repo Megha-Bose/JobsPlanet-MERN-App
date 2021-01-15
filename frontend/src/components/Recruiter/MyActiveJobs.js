@@ -7,26 +7,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import SearchIcon from "@material-ui/icons/Search";
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { Link } from "react-router-dom";
 
 
 
@@ -45,8 +33,6 @@ class MyActiveJobs extends Component {
             deadline: new Date(),
             editing: ""
         };
-        // this.renderIcon = this.renderIcon.bind(this);
-        // this.sortChange = this.sortChange.bind(this);
     }
 
     onLogoutClick = e => {
@@ -96,9 +82,7 @@ class MyActiveJobs extends Component {
                 console.log(error);
             })
         // to refresh
-        this.props.history.push("/viewMyActiveJobs");
-        this.props.history.push("/");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     editJob(job) {
@@ -114,20 +98,15 @@ class MyActiveJobs extends Component {
             this.state.deadline = job.deadline;
         }
         // to refresh
-        this.props.history.push("/viewMyActiveJobs");
-        this.props.history.push("/viewMyActiveJobs");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     onBack() {
-        const { user } = this.props.auth;
         this.state.showform = !this.state.showform;
         this.state.editing = "";
         
         // to refresh
-        this.props.history.push("/viewMyActiveJobs");
-        this.props.history.push("/");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     editJobSubmit(job) {
@@ -152,10 +131,9 @@ class MyActiveJobs extends Component {
                 console.log(error);
             })
         // to refresh
+        
         this.state.showform = !this.state.showform;
-        this.props.history.push("/viewMyActiveJobs");
-        this.props.history.push("/viewMyActiveJobs");
-        this.props.history.goBack();
+        window.location.reload();
     }
 
     // sortChange(){
@@ -190,18 +168,17 @@ class MyActiveJobs extends Component {
 
     render() 
     {
-        const user = this.state;
         const userRole = this.state.userdetails.role;
         const userid = this.state.userdetails._id;
         let MyActiveJobs;
-        if(userRole == "recruiter") {
+        if(userRole === "recruiter") {
             MyActiveJobs =
             <div>
                 <Grid container>
                 <Grid item xs={12} md={3} lg={3}>
                     <List component="nav" aria-label="mailbox folders">
                         <ListItem text>
-                                        <h3>Filters</h3>
+                            <h3>My Jobs Listing</h3>
                         </ListItem>
                     </List>
                 </Grid>
@@ -260,12 +237,20 @@ class MyActiveJobs extends Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.jobs.filter(item => item.recruiter == userid && (new Date()).getTime() <= (new Date(item.deadline.substring(0,10))).getTime()).map((job,ind) => (
+                                    {this.state.jobs.filter(item => item.recruiter === userid).map((job,ind) => (
                                         <TableRow key={ind}>
                                             <TableCell>{job.title}</TableCell>
                                             <TableCell>{job.dateOfPost.substring(0,10)}</TableCell>
-                                            <TableCell>{job.app}</TableCell>
+                                            <TableCell>{job.numapp}</TableCell>
                                             <TableCell>{job.posmax}</TableCell>
+                                            
+                                                <Link
+                                                    to={{
+                                                        pathname: "/appList",
+                                                        state: job._id // data array of objects
+                                                    }}
+                                                    >View applications</Link>
+                                                
                                             <TableCell>
                                                 <Dropdown>
                                                     <Dropdown.Toggle variant="secondary"/>

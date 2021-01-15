@@ -27,6 +27,25 @@ const applicationSchema = new Schema({
     sop: {
         type: String
     },
+    doj: {
+        type: Date
+    },
+    salary: {
+        type: Number
+    },
+    recruiterName: {
+        type: String
+    },
+    title: {
+        type: String
+    },
+    rating: {
+        type: Number
+    },
+    dateOfApplication: {
+        type: Date,
+        default: new Date()
+    }
 });
 
 module.exports = Application = mongoose.model('Application', applicationSchema)

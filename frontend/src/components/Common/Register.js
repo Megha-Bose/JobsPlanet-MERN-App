@@ -41,7 +41,7 @@ class Register extends Component {
     };
     onSubmit = e => {
         e.preventDefault();
-        if(this.state.role == "applicant")
+        if(this.state.role === "applicant" && this.state.skills!="")
             this.state.skills = this.state.skills.split(',');
         const newUser = {
             name: this.state.name,
@@ -59,7 +59,7 @@ class Register extends Component {
         const { errors } = this.state;
         const userRole = this.state.role;
         let RoleForm;
-        if(userRole == 'applicant') {
+        if(userRole === 'applicant') {
             RoleForm = 
             <div>
                 <label htmlFor="skills">Skills (comma-separated):</label><br></br>
@@ -72,7 +72,7 @@ class Register extends Component {
                 />
             </div>
         }
-        else if(userRole == 'recruiter') {
+        else if(userRole === 'recruiter') {
             RoleForm = 
             <div>
                 <label htmlFor="phone_number">Phone no.</label><br></br>
@@ -109,9 +109,7 @@ class Register extends Component {
                                     id="role"
                                     className={classnames("", {
                                         invalid: errors.role
-                                        })}className={classnames("", {
-                                        invalid: errors.role
-                                    })}
+                                        })}
                                 >
                                     <option value="">Select role</option>
                                     <option value="applicant">Applicant</option>
@@ -129,9 +127,7 @@ class Register extends Component {
                                     type="text"
                                     className={classnames("", {
                                         invalid: errors.name
-                                        })}className={classnames("", {
-                                        invalid: errors.name
-                                    })}
+                                        })}
                                 />
                                 <span className="red-text">{errors.name}</span>
                             </div>

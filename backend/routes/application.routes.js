@@ -25,7 +25,12 @@ router.post("/add_application", (req, res) => {
         recruiterId: req.body.recruiterId,
         stage: req.body.stage,
         status: req.body.status,
-        sop: req.body.sop
+        sop: req.body.sop,
+        doj: req.body.doj,
+        salary: req.body.salary,
+        recruiterName: req.body.recruiterName,
+        title: req.body.title,
+        rating: req.body.rating
     });
 
     newApplication.save()
@@ -36,6 +41,21 @@ router.post("/add_application", (req, res) => {
             res.status(400).send(err);
         });
 });
+
+// PUT Request
+// Edit Application Details
+router.put('/edit_application/:id', (req, res) => {
+    Application.findByIdAndUpdate(req.params.id, {
+      $set: req.body
+    }, (error, data) => {
+        if (error) {
+            console.log(error);
+        } else {
+            res.json(data)
+            console.log('Application updated successfully !')
+        }
+    })
+})
 
 // DELETE request
 // Delete an application from the db

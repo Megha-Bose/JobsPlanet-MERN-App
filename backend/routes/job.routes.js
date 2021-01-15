@@ -16,21 +16,33 @@ router.get("/get_jobs", function(req, res) {
 	})
 });
 
+// Getting one job
+router.get("/:id", function(req, res) {
+    Job.findById(req.params.id).then(job => 
+        res.json(job)
+    )
+    .catch(err => console.log(err));
+});
+
 // POST request 
 // Add a job to db
 router.post("/add_job", (req, res) => {
     const newJob = new Job({
         recruiter: req.body.recruiter,
+        recruiterName: req.body.recruiterName,
         title: req.body.title,
         description: req.body.description,
         type: req.body.type,
         duration: req.body.duration,
         salary: req.body.salary,
         appmax: req.body.appmax,
+        numapp: req.body.numapp,
         posmax: req.body.posmax,
+        numpos: req.body.numpos,
         address: req.body.address,
         skills: req.body.skills,
         rating: req.body.rating,
+        numrate: req.body.numrate,
         dateOfPost: req.body.dateOfPost,
         deadline: req.body.deadline,
     });

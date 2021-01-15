@@ -56,7 +56,7 @@ class AddEducation extends Component {
             startdate: this.state.startdate,
             enddate: this.state.enddate
         };
-        if(!newEducation.startdate || newEducation.school == "" || newEducation.degree == "")
+        if(!newEducation.startdate || newEducation.school === "" || newEducation.degree === "")
         {
             alert("School, Degree and Start Date are required!");
         }
@@ -70,19 +70,14 @@ class AddEducation extends Component {
                 .catch(function(error) {
                     console.log(error);
                 })
-            // to refresh
-            this.props.history.push("/profile");
-            this.props.history.push("/addeducation");
-            this.props.history.goBack();
+            window.location.reload();
         }
     };
 
     render() {
-        const { user } = this.props.auth;
-        const { errors } = this.state;
         const userRole = this.state.userDetails.role;
         let AddEducation;
-        if(userRole == 'applicant') {
+        if(userRole === 'applicant') {
             AddEducation = 
             <form noValidate onSubmit={this.onSubmit}>
                 <div className="input-field col s12">

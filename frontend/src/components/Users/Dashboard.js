@@ -33,23 +33,22 @@ class Dashboard extends Component {
     render() {
         const { user } = this.props.auth;
         let UserOptions;
-        if(this.state.userdetails.role == "applicant")
+        if(this.state.userdetails.role === "applicant")
         {
             UserOptions = 
             <ul>
                 <li><a href="/profile">My Profile</a></li>
-                <li><a href="#">View Jobs</a></li>
-                <li><a href="#">My Applications</a></li>
+                <li><a href="/jobsList">View Jobs</a></li>
+                <li><a href="/myApplications">My Applications</a></li>
             </ul>
         }
-        else if(this.state.userdetails.role == "recruiter")
+        else if(this.state.userdetails.role === "recruiter")
         {
             UserOptions = 
             <ul>
                 <li><a href="/profile">My Profile</a></li>
                 <li><a href="/addJob">Add Job</a></li>
                 <li><a href="/viewMyActiveJobs">My Job Listings</a></li>
-                <li><a href="#">Applications</a></li>
                 <li><a href="#">Employees</a></li>
             </ul>
         }

@@ -7,6 +7,9 @@ const jobSchema = new Schema({
         ref: 'Recruiter',
         //required: true
     },
+    recruiterName: {
+        type: String,
+    },
     title: {
         type: String,
         //required: true
@@ -32,6 +35,9 @@ const jobSchema = new Schema({
     appmax: {
         type: Number,
     },
+    numapp: {
+        type: Number,
+    },
     address: {
         type: String,
         //required: true
@@ -44,7 +50,13 @@ const jobSchema = new Schema({
         type: Number,
         //default: 5
     },
+    numrate: {
+        type: Number,
+    },
     posmax: {
+        type: Number,
+    },
+    numpos: {
         type: Number,
     },
     dateOfPost: {
