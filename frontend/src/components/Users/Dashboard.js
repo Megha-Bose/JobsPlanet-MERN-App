@@ -49,7 +49,7 @@ class Dashboard extends Component {
                 <li><a href="/profile">My Profile</a></li>
                 <li><a href="/addJob">Add Job</a></li>
                 <li><a href="/viewMyActiveJobs">My Job Listings</a></li>
-                <li><a href="#">Employees</a></li>
+                <li><a href="/employees">Employees</a></li>
             </ul>
         }
         return (

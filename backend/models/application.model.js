@@ -42,6 +42,10 @@ const applicationSchema = new Schema({
     rating: {
         type: Number
     },
+    applicantRating: {
+        type: Number,
+        default: -1
+    },
     dateOfApplication: {
         type: Date,
         default: new Date()

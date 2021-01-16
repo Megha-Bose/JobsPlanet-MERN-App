@@ -23,6 +23,7 @@ import MyApplications from "./components/Applicant/MyApplications";
 import CreateJob from "./components/Recruiter/CreateJob";
 import MyActiveJobs from "./components/Recruiter/MyActiveJobs";
 import AppList from "./components/Recruiter/AppList";
+import Employees from "./components/Recruiter/Employees";
 
 
 document.body.style = 'background: #D5D5D5;';
@@ -64,6 +65,7 @@ function App() {
               <PrivateRoute path="/addeducation" exact component={AddEducation} />
               <PrivateRoute path="/addJob" exact component={CreateJob} />
               <PrivateRoute path="/viewMyActiveJobs" exact component={MyActiveJobs} />
+              <PrivateRoute path="/employees" exact component={Employees} />
               <PrivateRoute path="/jobsList" exact component={JobsList} />
               <PrivateRoute path="/myApplications" exact component={MyApplications} />
               <PrivateRoute path="/appList" exact component={AppList} />

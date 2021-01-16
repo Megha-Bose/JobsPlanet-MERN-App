@@ -109,15 +109,23 @@ class MyApplications extends Component {
         let job = this.getjob(application.jobId);
         let nrate = job.numrate;
         nrate = nrate + 1;
-        let nrating = ((job.rating * nrate) + this.state.rating) / (nrate);
+        let nrating = 0;
+        if(job.rating == -1)
+        {
+            nrating = this.state.rating
+        }
+        else
+        {
+            nrating = ((+job.rating * (+nrate-1)) + +this.state.rating) / (+nrate);
+        }
+
         const editJob = {
             rating: nrating,
             numrate: nrate
         };
 
         const editApplication = {
-            rating: nrating,
-            rated: true
+            rating: nrating
         };
 
         axios

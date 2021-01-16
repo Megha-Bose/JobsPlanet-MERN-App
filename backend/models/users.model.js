@@ -38,7 +38,15 @@ const userSchema = new Schema({
 	profile_image: {
         type: String,
         // default: 'default-profile-image.jpg'
-    },
+	},
+	numapp: {
+		type: Number,
+		default: 0
+	},
+	numrate: {
+        type: Number,
+        default: 0
+	},
 	//recruiter
 	phone_number: {
         type: Number
@@ -55,6 +63,10 @@ const userSchema = new Schema({
     },
     resume: {
         type: String
+	},
+	working: {
+		type: Boolean,
+		default: false
     }
 });
 

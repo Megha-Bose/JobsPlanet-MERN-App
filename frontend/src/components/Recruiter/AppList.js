@@ -37,6 +37,7 @@ class AppList extends Component {
         this.state = {
             userdetails: [],
             users: [],
+            jobs: [],
             applications: [],
             rating: 0
         };
@@ -107,49 +108,7 @@ class AppList extends Component {
         return applicant;
     }
 
-    rate(application)
-    {
-        const { user } = this.props.auth;
-        let job = this.getjob(application.jobId);
-        let applicant = this.getapplicant(application.applicantId);
-
-        const editJob = {
-            
-        };
-
-        const editApplication = {
-            
-        };
-
-        axios
-            .put('http://localhost:4000/job/edit_job/' + job._id, editJob)
-            .then(response => {
-                console.log(editJob);
-                alert("Job rated successfully!");
-            })
-            .catch(function(error) {
-                console.log(error);
-                alert("Job could not be rated.");
-            })
-
-        axios
-            .put('http://localhost:4000/application/edit_application/' + application._id, editApplication)
-            .then(response => {
-                console.log(editApplication);
-            })
-            .catch(function(error) {
-                console.log(error);
-            })
-
-        window.location.reload();
-    
-    }
-
     shortlist(application) {
-        const { user } = this.props.auth;
-        let job = this.getjob(application.jobId);
-        let applicant = this.getapplicant(application.applicantId);
-
         const editApplication = {
             status: "Shortlisted"
         };
@@ -166,13 +125,29 @@ class AppList extends Component {
     }
 
     accept(application) {
-        const { user } = this.props.auth;
         let job = this.getjob(application.jobId);
-        let applicant = this.getapplicant(application.applicantId);
+        let nnumpos = job.numpos + 1;
+
+        const editApplicant = {
+            working: true
+        };
+
+        const editJob = {
+            numpos: nnumpos
+        };
 
         const editApplication = {
             status: "Accepted"
         };
+
+        axios
+            .put('http://localhost:4000/job/edit_job/' + job._id, editJob)
+            .then(response => {
+                console.log(editJob);
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
 
         axios
             .put('http://localhost:4000/application/edit_application/' + application._id, editApplication)
@@ -182,13 +157,28 @@ class AppList extends Component {
             .catch(function(error) {
                 console.log(error);
             })
+        
+        axios
+            .put('http://localhost:4000/user/edit_profile/' + application.applicantId, editApplicant)
+            .then(response => {
+                console.log(editApplicant);
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
+
         window.location.reload();
     }
 
     reject(application) {
-        const { user } = this.props.auth;
-        let job = this.getjob(application.jobId);
+        // const { user } = this.props.auth;
+        // let job = this.getjob(application.jobId);
         let applicant = this.getapplicant(application.applicantId);
+        let nnumapp = applicant.numapp + 1;
+
+        const editApplicant = {
+            numapp: nnumapp
+        };
 
         const editApplication = {
             status: "Rejected"
@@ -202,6 +192,16 @@ class AppList extends Component {
             .catch(function(error) {
                 console.log(error);
             })
+        
+        axios
+            .put('http://localhost:4000/user/edit_profile/' + application.applicantId, editApplicant)
+            .then(response => {
+                console.log(editApplicant);
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
+
         window.location.reload();
        
     }
@@ -247,7 +247,7 @@ class AppList extends Component {
                                                 <TableCell key={innd}>{applicant.name}</TableCell>
                                             ))}
                                             {this.state.users.filter(item => item._id === application.applicantId).map((applicant,innd) => (
-                                                <TableCell key={innd}>{applicant.rating}</TableCell>
+                                                <TableCell key={innd}>{applicant.rating ? applicant.rating.toFixed(1): ""}<i className="material-icons"><h6> star</h6></i></TableCell>
                                             ))}
                                             {this.state.users.filter(item => item._id === application.applicantId).map((applicant,innd) => (
                                                 <TableCell key={innd}>{applicant.skills.join(", ")}</TableCell>

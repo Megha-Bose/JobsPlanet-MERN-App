@@ -242,7 +242,7 @@ class MyActiveJobs extends Component {
                                             <TableCell>{job.title}</TableCell>
                                             <TableCell>{job.dateOfPost.substring(0,10)}</TableCell>
                                             <TableCell>{job.numapp}</TableCell>
-                                            <TableCell>{job.posmax}</TableCell>
+                                            <TableCell>{job.posmax - job.numpos}</TableCell>
                                             
                                                 <Link
                                                     to={{

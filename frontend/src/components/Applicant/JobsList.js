@@ -111,7 +111,9 @@ class JobsList extends Component {
         this.state.editing = job._id;
         //this.setState({showform: ShowForm});
         console.log(this.state.showForm);
-        window.location.reload();
+        this.props.history.push('/jobsList');
+        this.props.history.push('/jobsList');
+        this.props.history.goBack();
     }
 
     onSOPsubmit(job)
