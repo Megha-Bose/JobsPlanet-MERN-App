@@ -173,7 +173,7 @@ class EditProfile extends Component {
             EditUserDetails = 
             <form noValidate onSubmit={this.onSubmit}>
                 <div className="input-field col s12">
-                    <label htmlFor="name">Name</label><br></br>
+                    {/* <label htmlFor="name">Name</label><br></br>
                     <input
                         onChange={this.onChange}
                         value={user.name}
@@ -182,7 +182,7 @@ class EditProfile extends Component {
                     />
                     <div style={{ fontSize: 12, color: "red" }}>
                         {this.state.nameError}
-                    </div>
+                    </div> */}
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="bio">Bio.</label><br></br>

@@ -108,8 +108,8 @@ class MyApplications extends Component {
         const { user } = this.props.auth;
         let job = this.getjob(application.jobId);
         let nrate = job.numrate;
-        let nrating = (job.rating * nrate + this.state.rating) / (nrate+1);
         nrate = nrate + 1;
+        let nrating = ((job.rating * nrate) + this.state.rating) / (nrate);
         const editJob = {
             rating: nrating,
             numrate: nrate
@@ -168,6 +168,7 @@ class MyApplications extends Component {
                                 <TableHead>
                                     <TableRow>
                                             <TableCell>Title</TableCell>
+                                            <TableCell>Status</TableCell>
                                             <TableCell>Date of Joining</TableCell>
                                             <TableCell>Salary (per month)</TableCell>
                                             <TableCell>Recruiter</TableCell>
@@ -177,6 +178,7 @@ class MyApplications extends Component {
                                     {this.state.applications.filter(item => item.applicantId === user.id).map((application,ind) => (
                                         <TableRow key={ind}>
                                             <TableCell>{application.title}</TableCell>
+                                            <TableCell>{application.status}</TableCell>
                                             <TableCell>{application.doj}</TableCell>
                                             <TableCell>{application.salary}</TableCell>
                                             <TableCell>{application.recruiterName}</TableCell>
