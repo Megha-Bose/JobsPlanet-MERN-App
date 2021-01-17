@@ -26,7 +26,7 @@ import AppList from "./components/Recruiter/AppList";
 import Employees from "./components/Recruiter/Employees";
 
 
-document.body.style = 'background: #D5D5D5;';
+// document.body.style = 'background: #D5D5D5;';
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {

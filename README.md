@@ -1,4 +1,6 @@
-# MERN Stack Boilerplate
+# JobsPlanet
+
+Complete Job Portal made with MERN stack.
 
 ## Installations
 

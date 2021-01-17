@@ -40,11 +40,21 @@ class Employees extends Component {
             users: [],
             jobs: [],
             applications: [],
-            rating: 0
+            rating: 0,
+            sortbyname:true,
+            sortbytitle:true,
+            sortbyrating:true,
+            sortbydateofjoin: true
         };
         this.giveRating = this.giveRating.bind(this);
-        // this.renderIcon = this.renderIcon.bind(this);
-        // this.sortChange = this.sortChange.bind(this);
+        this.renderNameIcon = this.renderNameIcon.bind(this);
+        this.sortByName = this.sortByName.bind(this);
+        this.renderTitleIcon = this.renderTitleIcon.bind(this);
+        this.sortByTitle = this.sortByTitle.bind(this);
+        this.renderRatingIcon = this.renderRatingIcon.bind(this);
+        this.sortByRating = this.sortByRating.bind(this);
+        this.sortByDateOfJoin = this.sortByDateOfJoin.bind(this);
+        this.renderDateOfJoinIcon = this.renderDateOfJoinIcon.bind(this);
     }
 
     onLogoutClick = e => {
@@ -107,11 +117,162 @@ class Employees extends Component {
         this.setState({rating: e.target.value});
     }
 
+    getjob(jobId)
+    {
+        let job = this.state.jobs.filter(item => item._id === jobId)[0];
+        return job;
+    }
+
     getapplicant(applicantId)
     {
         let applicant = this.state.users.filter(item => item._id === applicantId)[0];
         console.log(applicant);
         return applicant;
+    }
+
+    sortByRating(){
+        var array = this.state.applications;
+        var flag = this.state.sortbyrating;
+        let uusers = this.state.users;
+        function getapplicant(applicantId)
+        {
+            let applicant = uusers.filter(item => item._id === applicantId)[0];
+            return applicant;
+        }
+        array.sort(function(a, b) {
+            let aapp = getapplicant(a.applicantId);
+            let bapp = getapplicant(b.applicantId);
+            if(aapp.rating !== undefined && bapp.rating !== undefined){
+                return (1 - +flag*2) * (+aapp.rating - +bapp.rating);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            applications:array,
+            sortbyrating:!this.state.sortbyrating,
+        })
+    }
+
+    renderRatingIcon(){
+        if(this.state.sortbyrating){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
+    sortByName(){
+        var array = this.state.applications;
+        var flag = this.state.sortbyname;
+        let uusers = this.state.users;
+        function getapplicant(applicantId)
+        {
+            let applicant = uusers.filter(item => item._id === applicantId)[0];
+            return applicant;
+        }
+        array.sort(function(a, b) {
+            console.log(a.applicantId);
+            let aapp = getapplicant(a.applicantId);
+            let bapp = getapplicant(b.applicantId);
+            if(aapp.name !== undefined && bapp.name !== undefined){
+                return (1 - +flag*2) * aapp.name.localeCompare(bapp.name);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            applications:array,
+            sortbyname:!this.state.sortbyname,
+        })
+    }
+
+    renderNameIcon(){
+        if(this.state.sortbyname){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
+    sortByTitle(){
+        var array = this.state.applications;
+        var flag = this.state.sortbytitle;
+        let jjobs = this.state.jobs;
+        function getjob(jobId)
+        {
+            let job = jjobs.filter(item => item._id === jobId)[0];
+            return job;
+        }
+        array.sort(function(a, b) {
+            let aapp = getjob(a.jobId);
+            let bapp = getjob(b.jobId);
+            if(aapp.title !== undefined && bapp.title !== undefined){
+                return (1 - +flag*2) * aapp.title.localeCompare(bapp.title);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            applications:array,
+            sortbytitle:!this.state.sortbytitle,
+        })
+    }
+
+    renderTitleIcon(){
+        if(this.state.sortbytitle){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
+    sortByDateOfJoin(){
+        var array = this.state.applications;
+        var flag = this.state.sortbydateofjoin;
+        array.sort(function(a, b) {
+            if(a.dateOfJoin !== undefined && b.dateOfJoin !== undefined){
+                return (1 - +flag*2) * (new Date(a.dateOfJoin) - new Date(b.dateOfJoin));
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            applications:array,
+            sortbydateofjoin:!this.state.sortbydateofjoin,
+        })
+    }
+
+    renderDateOfJoinIcon(){
+        if(this.state.sortbydateofjoin){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
     }
 
     rate(application)
@@ -182,15 +343,16 @@ class Employees extends Component {
                 </Grid>
                 </Grid>
                 <Grid container>
-                    <Grid item xs={12} md={2} lg={9}>
+                    <Grid item xs={12} md={12} lg={12}>
                         <Paper>
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Job Title</TableCell>
+                                        <TableCell>Name <Button onClick={this.sortByName}>{this.renderNameIcon()}</Button></TableCell>
+                                        <TableCell>Employee Rating <Button onClick={this.sortByRating}>{this.renderRatingIcon()}</Button></TableCell>
+                                        <TableCell>Job Title <Button onClick={this.sortByTitle}>{this.renderTitleIcon()}</Button></TableCell>
                                         <TableCell>Job Type</TableCell>
-                                        <TableCell>DOJ</TableCell>
+                                        <TableCell>DOJ <Button onClick={this.sortByDateOfJoin}>{this.renderDateOfJoinIcon()}</Button></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -199,6 +361,10 @@ class Employees extends Component {
                                             
                                             {this.state.users.filter(item => item._id === application.applicantId).map((applicant,innd) => (
                                                 <TableCell key={innd}>{applicant.name}</TableCell>
+                                            ))}
+
+                                            {this.state.users.filter(item => item._id === application.applicantId).map((applicant,innd) => (
+                                                <TableCell key={innd}>{applicant.rating ? applicant.rating.toFixed(1): ""}<i className="material-icons"><h6> star</h6></i></TableCell>
                                             ))}
                                             
                                             {this.state.jobs.filter(item => item._id === application.jobId).map((job,innnd) => (

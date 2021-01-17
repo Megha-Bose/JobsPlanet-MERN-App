@@ -60,7 +60,8 @@ const jobSchema = new Schema({
         type: Number,
     },
     dateOfPost: {
-		type: Date
+        type: Date,
+        default: new Date()
     },
     deadline:{
 		type: Date,

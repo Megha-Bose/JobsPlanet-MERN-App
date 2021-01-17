@@ -22,7 +22,7 @@ class CreateJob extends Component {
             salary: -1,
             salaryError: "",
             // default max no of pos and app = 10
-            posmax: 10,
+            posmax: 1,
             appmax: 10,
             numpos: 0,
             numapp: 0,
@@ -233,6 +233,7 @@ class CreateJob extends Component {
                         value={user.posmax}
                         id="posmax"
                         type="number"
+                        min="0"
                     />
                     {/* <div style={{ fontSize: 12, color: "red" }}>
                         {this.state.nameError}
@@ -245,6 +246,7 @@ class CreateJob extends Component {
                         value={user.appmax}
                         id="appmax"
                         type="number"
+                        min="0"
                     />
                     {/* <div style={{ fontSize: 12, color: "red" }}>
                         {this.state.nameError}

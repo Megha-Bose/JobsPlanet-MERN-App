@@ -39,10 +39,17 @@ class AppList extends Component {
             users: [],
             jobs: [],
             applications: [],
-            rating: 0
+            rating: 0,
+            sortbyname:true,
+            sortbydateofapply:true,
+            sortbyrating:true
         };
-        // this.renderIcon = this.renderIcon.bind(this);
-        // this.sortChange = this.sortChange.bind(this);
+        this.renderNameIcon = this.renderNameIcon.bind(this);
+        this.renderDateOfApplyIcon = this.renderDateOfApplyIcon.bind(this);
+        this.renderRatingIcon = this.renderRatingIcon.bind(this);
+        this.sortByName = this.sortByName.bind(this);
+        this.sortByDateOfApply = this.sortByDateOfApply.bind(this);
+        this.sortByRating = this.sortByRating.bind(this);
     }
 
     onLogoutClick = e => {
@@ -103,9 +110,118 @@ class AppList extends Component {
 
     getapplicant(applicantId)
     {
-        let applicant = this.state.users.filter(item => item.id === applicantId)[0];
-        console.log(applicant);
+        let applicant = this.state.users.filter(item => item._id === applicantId)[0];
+        // console.log(applicant);
         return applicant;
+    }
+
+    sortByName(){
+        var array = this.state.applications;
+        var flag = this.state.sortbyname;
+        let uusers = this.state.users;
+        function getapplicant(applicantId)
+        {
+            let applicant = uusers.filter(item => item._id === applicantId)[0];
+            return applicant;
+        }
+        array.sort(function(a, b) {
+            console.log(a.applicantId);
+            let aapp = getapplicant(a.applicantId);
+            let bapp = getapplicant(b.applicantId);
+            if(aapp.name !== undefined && bapp.name !== undefined){
+                return (1 - +flag*2) * aapp.name.localeCompare(bapp.name);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            applications:array,
+            sortbyname:!this.state.sortbyname,
+        })
+    }
+
+    sortByDateOfApply(){
+        var array = this.state.applications;
+        var flag = this.state.sortbydateofapply;
+        array.sort(function(a, b) {
+            if(a.dateOfApply !== undefined && b.dateOfApply !== undefined){
+                return (1 - +flag*2) * (new Date(a.dateOfApply) - new Date(b.dateOfApply));
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            applications:array,
+            sortbydateofapply:!this.state.sortbydateofapply,
+        })
+    }
+
+    sortByRating(){
+        var array = this.state.applications;
+        var flag = this.state.sortbyrating;
+        let uusers = this.state.users;
+        function getapplicant(applicantId)
+        {
+            let applicant = uusers.filter(item => item._id === applicantId)[0];
+            return applicant;
+        }
+        array.sort(function(a, b) {
+            let aapp = getapplicant(a.applicantId);
+            let bapp = getapplicant(b.applicantId);
+            // console.log(aapp);
+            // console.log(bapp);
+            if(aapp.rating !== undefined && bapp.rating !== undefined){
+                return (1 - +flag*2) * (+aapp.rating - +bapp.rating);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            applications:array,
+            sortbyrating:!this.state.sortbyrating,
+        })
+    }
+
+    renderNameIcon(){
+        if(this.state.sortbyname){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
+    renderDateOfApplyIcon(){
+        if(this.state.sortbydateofapply){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
+    renderRatingIcon(){
+        if(this.state.sortbyrating){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
     }
 
     shortlist(application) {
@@ -129,7 +245,8 @@ class AppList extends Component {
         let nnumpos = job.numpos + 1;
 
         const editApplicant = {
-            working: true
+            working: true,
+            numapp: 0
         };
 
         const editJob = {
@@ -137,7 +254,8 @@ class AppList extends Component {
         };
 
         const editApplication = {
-            status: "Accepted"
+            status: "Accepted",
+            doj: new Date()
         };
 
         axios
@@ -166,6 +284,20 @@ class AppList extends Component {
             .catch(function(error) {
                 console.log(error);
             })
+        this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id).map((appli,ind) => 
+        {
+            const editAppli = {
+                status: "Rejected"
+            }
+            axios
+                .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
+                .then(response => {
+                    console.log(editAppli);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+        })
 
         window.location.reload();
     }
@@ -174,7 +306,7 @@ class AppList extends Component {
         // const { user } = this.props.auth;
         // let job = this.getjob(application.jobId);
         let applicant = this.getapplicant(application.applicantId);
-        let nnumapp = applicant.numapp + 1;
+        let nnumapp = +applicant.numapp - 1;
 
         const editApplicant = {
             numapp: nnumapp
@@ -230,13 +362,13 @@ class AppList extends Component {
                                 <TableHead>
                                     <TableRow>
                                             <TableCell>Title</TableCell>
-                                            <TableCell>Applicant</TableCell>
-                                            <TableCell>Appl. Rating</TableCell>
+                                            <TableCell>Applicant <Button onClick={this.sortByName}>{this.renderNameIcon()}</Button></TableCell>
+                                            <TableCell>Appl. Rating <Button onClick={this.sortByRating}>{this.renderRatingIcon()}</Button></TableCell>
                                             <TableCell>Appl. Skills</TableCell>
                                             <TableCell><ul><li>Education</li></ul></TableCell>
                                             <TableCell>SOP</TableCell>
                                             <TableCell>Status</TableCell>
-                                            <TableCell>Date of Application</TableCell>
+                                            <TableCell>Date of Application <Button onClick={this.sortByDateOfApply}>{this.renderDateOfApplyIcon()}</Button></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

@@ -24,6 +24,8 @@ class MyActiveJobs extends Component {
         super(props);
         this.state = {
             userdetails: [],
+            users: [],
+            applications: [],
             jobs: [],
             sortedJobs: [], 
             sortName:true, 
@@ -61,6 +63,20 @@ class MyActiveJobs extends Component {
             .catch(function(error) {
                 console.log(error);
             })
+        axios.get('http://localhost:4000/user/')
+            .then(response => {
+                this.setState({users: response.data});
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
+        axios.get('http://localhost:4000/application/get_applications')
+            .then(response => {
+                this.setState({applications: response.data});
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
     }
 
 
@@ -73,14 +89,61 @@ class MyActiveJobs extends Component {
     }
 
     deljob(id) {
+        this.state.applications.filter(item => item.jobId === id && item.status === "Accepted").map((appli,ind) => 
+        {
+            const editEmployee = {
+                working: false
+            }
+            axios
+                .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editEmployee)
+                .then(response => {
+                    console.log(editEmployee);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+        })
+
+        this.state.applications.filter(item => item.jobId === id).map((appli,ind) => 
+        {
+            let applicant = this.state.users.filter(item => item._id === appli.applicantId)[0];
+            let nnumapp = +applicant.numapp - 1;
+
+            const editApplicant = {
+                numapp: nnumapp
+            };
+
+            axios
+                .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editApplicant)
+                .then(response => {
+                    console.log(editApplicant);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+
+            const editAppli = {
+                status: "Deleted"
+            }
+            axios
+                .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
+                .then(response => {
+                    console.log(editAppli);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+        })
+
         axios
             .delete('http://localhost:4000/job/del_job/' + id)
             .then(response => {
-                console.log("Job deleted successfully.");
+                alert("Job deleted successfully.");
             })
             .catch(function(error) {
                 console.log(error);
             })
+
         // to refresh
         window.location.reload();
     }
@@ -223,7 +286,7 @@ class MyActiveJobs extends Component {
                             </ListItem>
                         </List>
                     </Grid> */}
-                    <Grid item xs={12} md={9} lg={9}>
+                    <Grid item xs={12} md={12} lg={12}>
                         <Paper>
                             <Table size="small">
                                 <TableHead>

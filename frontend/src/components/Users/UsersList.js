@@ -56,7 +56,6 @@ class UsersList extends Component {
             sortName:!this.state.sortName,
         })
     }
-
     renderIcon(){
         if(this.state.sortName){
             return(
@@ -74,7 +73,7 @@ class UsersList extends Component {
         return (
             <div>
                 <Grid container>
-                <Grid item xs={12} md={3} lg={3}>
+                {/* <Grid item xs={12} md={3} lg={3}>
                     <List component="nav" aria-label="mailbox folders">
                         <ListItem text>
                                         <h3>Filters</h3>
@@ -121,8 +120,8 @@ class UsersList extends Component {
                                 />
                             </ListItem>
                         </List>
-                    </Grid>
-                    <Grid item xs={12} md={9} lg={9}>
+                    </Grid> */}
+                    <Grid item xs={12} md={12} lg={12}>
                         <Paper>
                             <Table size="small">
                                 <TableHead>
@@ -135,7 +134,7 @@ class UsersList extends Component {
                                 <TableBody>
                                     {this.state.users.map((user,ind) => (
                                         <TableRow key={ind}>
-                                            <TableCell>{user.date}</TableCell>
+                                            <TableCell>{user.date.substring(0,10)}</TableCell>
                                             <TableCell>{user.name}</TableCell>
                                             <TableCell>{user.email}</TableCell>
                                         </TableRow>

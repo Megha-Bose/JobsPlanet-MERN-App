@@ -37,17 +37,31 @@ class JobsList extends Component {
         this.state = {
             userdetails: [],
             jobs: [],
-            sortedJobs: [], 
+            extraJobs: [], 
             applications: [],
             sortName:true, 
             recruiterName: "",
             showForm: false,
             editing: "",
             enteredsop: "",
-            sopError: ""
+            sopError: "",
+            sortbysalary:true,
+            sortbyduration:true,
+            sortbyrating:true,
+            searchval: "",
+            jobTypeFilterVal: "",
+            salaryFilterMinVal: "",
+            salaryFilterMaxVal: "",
+            durationFilterVal: ""
         };
-        // this.renderIcon = this.renderIcon.bind(this);
-        // this.sortChange = this.sortChange.bind(this);
+        this.renderSalaryIcon = this.renderSalaryIcon.bind(this);
+        this.renderDurationIcon = this.renderDurationIcon.bind(this);
+        this.renderRatingIcon = this.renderRatingIcon.bind(this);
+        this.sortBySalary = this.sortBySalary.bind(this);
+        this.sortByDuration = this.sortByDuration.bind(this);
+        this.sortByRating = this.sortByRating.bind(this);
+        this.onSearch = this.onSearch.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     onLogoutClick = e => {
@@ -57,6 +71,48 @@ class JobsList extends Component {
 
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
+    };
+
+    onFilter = e => {
+        let jobTypeVal = this.state.jobTypeFilterVal;
+        let salaryMinVal = this.state.salaryFilterMinVal;
+        let salaryMaxVal = this.state.salaryFilterMaxVal;
+        let durationVal = "";
+        if(this.state.durationFilterVal !== "")
+        {
+            durationVal = parseInt(this.state.durationFilterVal);
+        }
+        let filteredJobs = this.state.extraJobs;
+        if(jobTypeVal !== "" && jobTypeVal !== undefined)
+        {
+            filteredJobs = filteredJobs.filter(item => item.type === jobTypeVal);
+        }
+        if(salaryMinVal !== "" && salaryMinVal !== undefined)
+        {
+            filteredJobs = filteredJobs.filter(item => item.salary >= salaryMinVal);
+        }
+        if(salaryMaxVal !== "" && salaryMaxVal !== undefined)
+        {
+            filteredJobs = filteredJobs.filter(item => item.salary < salaryMaxVal);
+        }
+        if(durationVal !== "" && durationVal !== undefined)
+        {
+            filteredJobs = filteredJobs.filter(item => item.duration < durationVal);
+        }
+        this.setState({ jobs: filteredJobs });
+    };
+
+    onSearch = e => {
+        this.setState({ searchval : e.target.value });
+        let sval = this.state.searchval;
+        if(sval === "" || sval === undefined)
+        {
+            this.setState({ jobs : this.state.extraJobs });
+        }
+        else
+        {
+            this.setState({ jobs : this.state.extraJobs.filter(item => item.title.includes(sval)) });
+        }
     };
 
     componentDidMount() {
@@ -73,7 +129,7 @@ class JobsList extends Component {
                 })
         axios.get('http://localhost:4000/job/get_jobs')
             .then(response => {
-                this.setState({jobs: response.data, sortedJobs:response.data});
+                this.setState({jobs: response.data, extraJobs:response.data});
             })
             .catch(function(error) {
                 console.log(error);
@@ -96,6 +152,96 @@ class JobsList extends Component {
         }
     }
 
+    sortBySalary(){
+        var array = this.state.jobs;
+        var flag = this.state.sortbysalary;
+        array.sort(function(a, b) {
+            if(a.salary !== undefined && b.salary !== undefined){
+                return (1 - +flag*2) * (+a.salary - +b.salary);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            jobs:array,
+            sortbysalary:!this.state.sortbysalary,
+        })
+    }
+
+    sortByDuration(){
+        var array = this.state.jobs;
+        var flag = this.state.sortbyduration;
+        array.sort(function(a, b) {
+            if(a.duration !== undefined && b.duration !== undefined){
+                return (1 - +flag*2) * (+a.duration - +b.duration);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            jobs:array,
+            sortbyduration:!this.state.sortbyduration,
+        })
+    }
+
+    sortByRating(){
+        var array = this.state.jobs;
+        var flag = this.state.sortbyrating;
+        array.sort(function(a, b) {
+            if(a.rating !== undefined && b.rating !== undefined){
+                return (1 - +flag*2) * (+a.rating - +b.rating);
+            }
+            else{
+                return 1;
+            }
+          });
+        this.setState({
+            jobs:array,
+            sortbyrating:!this.state.sortbyrating,
+        })
+    }
+
+    renderSalaryIcon(){
+        if(this.state.sortbysalary){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
+    renderDurationIcon(){
+        if(this.state.sortbyduration){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
+    renderRatingIcon(){
+        if(this.state.sortbyrating){
+            return(
+                <ArrowDownwardIcon/>
+            )
+        }
+        else{
+            return(
+                <ArrowUpwardIcon/>
+            )            
+        }
+    }
+
     applied(job) {
         const { user } = this.props.auth;
         let num = 0;
@@ -107,13 +253,24 @@ class JobsList extends Component {
 
     apply(job)
     {
-        this.state.showForm = !this.state.showForm;
-        this.state.editing = job._id;
-        //this.setState({showform: ShowForm});
-        console.log(this.state.showForm);
-        this.props.history.push('/jobsList');
-        this.props.history.push('/jobsList');
-        this.props.history.goBack();
+        if(this.state.userdetails.numapp > 10)
+        {
+            alert("Maximum open applications of 10 reached. Take a break!");
+        }
+        else if(this.state.userdetails.working == true)
+        {
+            alert("You are already accepted into one of the jobs you applied for. Check My Applications page.");
+        }
+        else
+        {
+            this.state.showForm = !this.state.showForm;
+            this.state.editing = job._id;
+            //this.setState({showform: ShowForm});
+            console.log(this.state.showForm);
+            this.props.history.push('/jobsList');
+            this.props.history.push('/jobsList');
+            this.props.history.goBack();
+        }
     }
 
     onSOPsubmit(job)
@@ -132,14 +289,28 @@ class JobsList extends Component {
             title: job.title
         };
 
-        let nnumapp = job.numapp + 1;
+        let nnumapp = +job.numapp + 1;
 
         const editJob = {
             numapp: nnumapp 
         }
 
+        let appnumapp = +this.state.userdetails.numapp + 1;
+
+        const editApplicant = {
+            numapp:  appnumapp
+        }
+
         let num = this.state.enteredsop.split(' ').length;
-        if(num <= 250)
+
+        let soperror = "";
+        if(num>250)
+        {
+            soperror = "Maximum 250 words allowed.";
+            this.setState({sopError: soperror});
+        }
+
+        if(num <= 250 && this.state.userdetails.numapp <= 10)
         {
             axios
                 .post('http://localhost:4000/application/add_application', newApplication)
@@ -159,102 +330,118 @@ class JobsList extends Component {
                 .catch(function(error) {
                     console.log(error);
                 })
+            axios
+                .put('http://localhost:4000/user/edit_profile/' + user.id, editApplicant)
+                .then(response => {
+                    console.log(editApplicant);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
             this.state.editing = "";
             window.location.reload();
         }
-        else{
-            let soperror = "Maximum 250 words allowed.";
-            this.setState({sopError: soperror});
-        }
     }
-
-    // sortChange(){
-    //     var array = this.state.users;
-    //     var flag = this.state.sortName;
-    //     array.sort(function(a, b) {
-    //         if(a.date != undefined && b.date != undefined){
-    //             return (1 - flag*2) * (new Date(a.date) - new Date(b.date));
-    //         }
-    //         else{
-    //             return 1;
-    //         }
-    //       });
-    //     this.setState({
-    //         users:array,
-    //         sortName:!this.state.sortName,
-    //     })
-    // }
-
-    // renderIcon(){
-    //     if(this.state.sortName){
-    //         return(
-    //             <ArrowDownwardIcon/>
-    //         )
-    //     }
-    //     else{
-    //         return(
-    //             <ArrowUpwardIcon/>
-    //         )            
-    //     }
-    // }
+    
 
     render() 
     {
         const userRole = this.state.userdetails.role;
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+        ];
         let AllJobs;
         if(userRole === "applicant") {
             AllJobs =
             <div>
                 <Grid container>
-                <Grid item xs={12} md={3} lg={3}>
+                <Grid item xs={12} md={12} lg={12}>
                     <List component="nav" aria-label="mailbox folders">
                         <ListItem text>
                             <h3>Active Jobs</h3>
                         </ListItem>
                     </List>
                 </Grid>
-                    {/* <Grid item xs={12} md={9} lg={9}>
+                    <Grid item xs={12} md={12} lg={12}>
                     <List component="nav" aria-label="mailbox folders">
                         <TextField 
-                        id="standard-basic" 
-                        label="Search" 
+                        id="searchval" 
+                        onChange={this.onChange}
+                        value={this.state.searchval}
+                        placeholder="Search"
                         fullWidth={true}   
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment>
-                                    <IconButton>
+                                    
+                                    <IconButton onClick={this.onSearch}>
                                         <SearchIcon />
                                     </IconButton>
+                                   
                                 </InputAdornment>
                             )}}
                         />
                     </List>
-                    </Grid> */}
+                    </Grid>
                 </Grid>
                 <Grid container>
-                    {/* <Grid item xs={12} md={3} lg={3}>
+                    <Grid item xs={12} md={12} lg={12}>
+                        Filters:
                         <List component="nav" aria-label="mailbox folders">
-
-                            <ListItem button>
-                                <form noValidate autoComplete="off">
-                                    <label>Salary</label>
-                                    <TextField id="standard-basic" label="Enter Min" fullWidth={true} />
-                                    <TextField id="standard-basic" label="Enter Max" fullWidth={true}/>
-                                </form>                                                                
-                            </ListItem>
-                            <Divider />
-                            <ListItem button divider>
-                                <Autocomplete
-                                    id="combo-box-demo"
-                                    options={this.state.jobs}
-                                    getOptionLabel={(option) => option.name}
-                                    style={{ width: 300 }}
-                                    renderInput={(params) => <TextField {...params} label="Select Names" variant="outlined" />}
-                                />
-                            </ListItem>
+                            <TextField 
+                                id="jobTypeFilterVal" 
+                                onChange={this.onChange}
+                                value={this.state.jobTypeFilterVal}
+                                placeholder="Job Type"
+                                fullWidth={true}   
+                            />
                         </List>
-                    </Grid> */}
-                    <Grid item xs={12} md={9} lg={9}>
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={12}>
+                        <List component="nav" aria-label="mailbox folders">
+                            <TextField 
+                                id="salaryFilterMinVal" 
+                                onChange={this.onChange}
+                                value={this.state.salaryFilterMinVal}
+                                placeholder="Min Salary"
+                                fullWidth={true}   
+                            />
+                            <TextField 
+                                id="salaryFilterMaxVal" 
+                                onChange={this.onChange}
+                                value={this.state.salaryFilterMaxVal}
+                                placeholder="Max Salary"
+                                fullWidth={true}   
+                            />
+                        </List>
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={12}>
+                        <List component="nav" aria-label="mailbox folders">
+                       
+                            <select 
+                                value={this.state.durationFilterVal} 
+                                onChange={this.onChange}
+                                id="durationFilterVal"
+                            >
+                                <option value="">Select duration</option>
+                                <option value = "0" >Indefinite</option>
+                                <option value="1">1 month</option>
+                                <option value="2">2 months</option>
+                                <option value="3">3 months</option>
+                                <option value="4">4 months</option>
+                                <option value="5">5 months</option>
+                                <option value="6">6 months</option>
+                            </select>
+                
+                            <hr></hr>
+                            <button onClick={this.onFilter}>
+                                Filter
+                            </button>
+                            <hr></hr>
+                        </List>
+                    </Grid>
+
+                    <Grid item xs={12} md={12} lg={12}>
                         <Paper>
                             <Table size="small">
                                 <TableHead>
@@ -262,10 +449,12 @@ class JobsList extends Component {
                                             {/* <TableCell> <Button onClick={this.sortChange}>{this.renderIcon()}</Button>Date</TableCell> */}
                                             <TableCell>Title</TableCell>
                                             <TableCell>Recruiter</TableCell>
-                                            <TableCell>Salary (per month)</TableCell>
-                                            <TableCell>Duration(months)</TableCell>
+                                            <TableCell>Type</TableCell>
+                                            <TableCell><Button onClick={this.sortBySalary}>{this.renderSalaryIcon()}</Button>Salary (per month)</TableCell>
+                                            <TableCell><Button onClick={this.sortByDuration}>{this.renderDurationIcon()}</Button>Duration(months): 0 for Indefinite</TableCell>
+                                            <TableCell>Date of posting</TableCell>
                                             <TableCell>Deadline</TableCell>
-                                            <TableCell>Rating</TableCell>
+                                            <TableCell><Button onClick={this.sortByRating}>{this.renderRatingIcon()}</Button>Rating</TableCell>
                                             
                                     </TableRow>
                                 </TableHead>
@@ -274,8 +463,10 @@ class JobsList extends Component {
                                         <TableRow key={ind}>
                                             <TableCell>{job.title}</TableCell>
                                             <TableCell>{job.recruiterName}</TableCell>
+                                            <TableCell>{job.type}</TableCell>
                                             <TableCell>{job.salary}</TableCell>
                                             <TableCell>{job.duration}</TableCell>
+                                            <TableCell>Day-{new Date(job.dateOfPost).getDate()}, Month-{monthNames[new Date(job.dateOfPost).getMonth()]}, Year-{new Date(job.dateOfPost).getFullYear()}</TableCell>
                                             <TableCell>{job.deadline.substring(0,10)}</TableCell>
                                             <TableCell>{job.rating? job.rating.toFixed(1): ""}<i className="material-icons"><h6> star</h6></i></TableCell>
                                     

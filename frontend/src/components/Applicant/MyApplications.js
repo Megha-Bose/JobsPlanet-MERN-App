@@ -170,7 +170,7 @@ class MyApplications extends Component {
                 </Grid>
                 </Grid>
                 <Grid container>
-                    <Grid item xs={12} md={2} lg={9}>
+                    <Grid item xs={12} md={12} lg={12}>
                         <Paper>
                             <Table size="small">
                                 <TableHead>
@@ -210,7 +210,7 @@ class MyApplications extends Component {
                                             :
 
                                             <TableCell>
-                                                <div></div>                                           
+                                                <div>Rated: {application.rating}</div>                                           
                                             </TableCell>
 
                                             }
