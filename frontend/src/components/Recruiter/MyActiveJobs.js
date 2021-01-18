@@ -89,25 +89,15 @@ class MyActiveJobs extends Component {
     }
 
     deljob(id) {
-        this.state.applications.filter(item => item.jobId === id && item.status === "Accepted").map((appli,ind) => 
-        {
-            const editEmployee = {
-                working: false
-            }
-            axios
-                .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editEmployee)
-                .then(response => {
-                    console.log(editEmployee);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-        })
-
-        this.state.applications.filter(item => item.jobId === id).map((appli,ind) => 
+        this.state.applications.filter(item => item.jobId === id).forEach((appli) => 
         {
             let applicant = this.state.users.filter(item => item._id === appli.applicantId)[0];
-            let nnumapp = +applicant.numapp - 1;
+            let nnumapp = +applicant.numapp;
+
+            if(applicant.working == false)
+            {
+                nnumapp = nnumapp - 1;
+            }
 
             const editApplicant = {
                 numapp: nnumapp
@@ -129,6 +119,21 @@ class MyActiveJobs extends Component {
                 .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
                 .then(response => {
                     console.log(editAppli);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+        })
+
+        this.state.applications.filter(item => item.jobId === id && item.status === "Accepted").forEach((appli) => 
+        {
+            const editEmployee = {
+                working: false
+            }
+            axios
+                .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editEmployee)
+                .then(response => {
+                    console.log(editEmployee);
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -161,7 +166,7 @@ class MyActiveJobs extends Component {
             this.state.deadline = job.deadline;
         }
         // to refresh
-        window.location.reload();
+        this.props.history.push('/viewMyActiveJobs');
     }
 
     onBack() {
@@ -169,12 +174,11 @@ class MyActiveJobs extends Component {
         this.state.editing = "";
         
         // to refresh
-        window.location.reload();
+        this.props.history.push('/viewMyActiveJobs');
     }
 
     editJobSubmit(job) {
         const idToChange = job._id;
-        // alert(this.state.posmax);
         const ind = this.state.jobs.findIndex(x => x._id === idToChange)
         if(this.state.appmax)
             this.state.jobs[ind].appmax = this.state.appmax;
@@ -182,7 +186,6 @@ class MyActiveJobs extends Component {
             this.state.jobs[ind].posmax = this.state.posmax;
         if(this.state.deadline)
             this.state.jobs[ind].deadline = this.state.deadline;
-        // alert(this.state.jobs[ind].posmax);
         axios
             .put('http://localhost:4000/job/edit_job/' + idToChange, this.state.jobs[ind])
             .then(response => {
@@ -199,35 +202,6 @@ class MyActiveJobs extends Component {
         window.location.reload();
     }
 
-    // sortChange(){
-    //     var array = this.state.users;
-    //     var flag = this.state.sortName;
-    //     array.sort(function(a, b) {
-    //         if(a.date != undefined && b.date != undefined){
-    //             return (1 - flag*2) * (new Date(a.date) - new Date(b.date));
-    //         }
-    //         else{
-    //             return 1;
-    //         }
-    //       });
-    //     this.setState({
-    //         users:array,
-    //         sortName:!this.state.sortName,
-    //     })
-    // }
-
-    // renderIcon(){
-    //     if(this.state.sortName){
-    //         return(
-    //             <ArrowDownwardIcon/>
-    //         )
-    //     }
-    //     else{
-    //         return(
-    //             <ArrowUpwardIcon/>
-    //         )            
-    //     }
-    // }
 
     render() 
     {
@@ -237,65 +211,28 @@ class MyActiveJobs extends Component {
         if(userRole === "recruiter") {
             MyActiveJobs =
             <div>
-                <Grid container>
+                <Grid>
                 <Grid item xs={12} md={3} lg={3}>
                     <List component="nav" aria-label="mailbox folders">
                         <ListItem text>
-                            <h3>My Jobs Listing</h3>
+                            <h3>My Jobs Listing </h3>
+                            <Tooltip title="Add Job" aria-label="added">
+                            <Link style={{ color: '#009900', weight: 'bold' }} to="/addJob"><i className="material-icons"><h2> add</h2></i></Link>
+                            </Tooltip>
                         </ListItem>
                     </List>
                 </Grid>
-                    {/* <Grid item xs={12} md={9} lg={9}>
-                    <List component="nav" aria-label="mailbox folders">
-                        <TextField 
-                        id="standard-basic" 
-                        label="Search" 
-                        fullWidth={true}   
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment>
-                                    <IconButton>
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            )}}
-                        />
-                    </List>
-                    </Grid> */}
                 </Grid>
                 <Grid container>
-                    {/* <Grid item xs={12} md={3} lg={3}>
-                        <List component="nav" aria-label="mailbox folders">
-
-                            <ListItem button>
-                                <form noValidate autoComplete="off">
-                                    <label>Salary</label>
-                                    <TextField id="standard-basic" label="Enter Min" fullWidth={true} />
-                                    <TextField id="standard-basic" label="Enter Max" fullWidth={true}/>
-                                </form>                                                                
-                            </ListItem>
-                            <Divider />
-                            <ListItem button divider>
-                                <Autocomplete
-                                    id="combo-box-demo"
-                                    options={this.state.jobs}
-                                    getOptionLabel={(option) => option.name}
-                                    style={{ width: 300 }}
-                                    renderInput={(params) => <TextField {...params} label="Select Names" variant="outlined" />}
-                                />
-                            </ListItem>
-                        </List>
-                    </Grid> */}
                     <Grid item xs={12} md={12} lg={12}>
                         <Paper>
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
-                                            {/* <TableCell> <Button onClick={this.sortChange}>{this.renderIcon()}</Button>Date</TableCell> */}
                                             <TableCell>Title</TableCell>
                                             <TableCell>Date of posting</TableCell>
                                             <TableCell>Number of Applicants</TableCell>
-                                            <TableCell>Maximum Number of Positions</TableCell>
+                                            <TableCell>Remaining Number of Positions</TableCell>
                                             <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -350,7 +287,7 @@ class MyActiveJobs extends Component {
                                             </TableCell>
                                             <TableCell>                   
                                             <div>
-                                            { !this.state.showform ? 
+                                            { !this.state.showform || this.state.editing !== job._id? 
                                                 <div></div>
                                             : 
                                                 <div>
@@ -416,7 +353,7 @@ class MyActiveJobs extends Component {
             </div>
         }
         return (
-            <div style={{ height: "75vh" }} className="container valign-wrapper">
+            <div style={{ height: "75vh" }} className="valign-wrapper">
                 <div className="row">
                     <div className="col s12 center-align">
                         <Card style={{ width: '100%' }}>

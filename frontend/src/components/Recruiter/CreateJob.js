@@ -21,7 +21,6 @@ class CreateJob extends Component {
             durationstr: "",
             salary: -1,
             salaryError: "",
-            // default max no of pos and app = 10
             posmax: 1,
             appmax: 10,
             numpos: 0,
@@ -35,7 +34,8 @@ class CreateJob extends Component {
             numrate: 0,
             dateOfPost: new Date(),
             // default 100 days from now
-            deadline: new Date(new Date().getTime()+(100*24*60*60*1000))
+            deadline: new Date(new Date().getTime()+(100*24*60*60*1000)),
+            deadlineError: "",
         }
     };
 
@@ -56,6 +56,7 @@ class CreateJob extends Component {
         let durationError = "";
         let salaryError = "";
         let addressError = "";
+        let deadlineError = "";
 
     
         if (this.state.title === "") {
@@ -77,10 +78,14 @@ class CreateJob extends Component {
         if (this.state.address === "") {
             addressError = "Address cannot be blank";
         }
+
+        if (new Date(this.state.deadline) < new Date().getTime()) {
+            deadlineError = "Deadline cannot be before tomorrow";
+        }
     
         if (titleError || typeError || durationError || salaryError
-            || addressError) {
-            this.setState({ titleError, typeError, durationError, salaryError, addressError });
+            || addressError || deadlineError) {
+            this.setState({ titleError, typeError, durationError, salaryError, addressError, deadlineError });
             return false;
         }
     
@@ -273,20 +278,6 @@ class CreateJob extends Component {
                         type="text"
                     />
                 </div>
-                
-                {/*<div className="input-field col s12">
-                    <label htmlFor="dateOfPost">Date of Post</label><br></br>
-                    <input
-                        onChange={this.onChange}
-                        value={user.dateOfPost}
-                        id="dateOfPost"
-                        type="date"
-                    />
-                    <div style={{ fontSize: 12, color: "red" }}>
-                        {this.state.nameError}
-                    </div>
-                </div>*/}
-
                 <div className="input-field col s12">
                     <label htmlFor="deadline">Deadline (default: 100 days from now)</label><br></br>
                     <input
@@ -295,9 +286,9 @@ class CreateJob extends Component {
                         id="deadline"
                         type="date"
                     />
-                    {/* <div style={{ fontSize: 12, color: "red" }}>
-                        {this.state.nameError}
-                    </div> */}
+                    <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.deadlineError}
+                    </div>
                 </div>
                 <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                     <button

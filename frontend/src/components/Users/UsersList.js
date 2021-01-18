@@ -73,57 +73,9 @@ class UsersList extends Component {
         return (
             <div>
                 <Grid container>
-                {/* <Grid item xs={12} md={3} lg={3}>
-                    <List component="nav" aria-label="mailbox folders">
-                        <ListItem text>
-                                        <h3>Filters</h3>
-                        </ListItem>
-                    </List>
-                </Grid>
-                    <Grid item xs={12} md={9} lg={9}>
-                    <List component="nav" aria-label="mailbox folders">
-                        <TextField 
-                        id="standard-basic" 
-                        label="Search" 
-                        fullWidth={true}   
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment>
-                                    <IconButton>
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            )}}
-                        />
-                    </List>
-                    </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <List component="nav" aria-label="mailbox folders">
-
-                            <ListItem button>
-                                <form noValidate autoComplete="off">
-                                    <label>Salary</label>
-                                    <TextField id="standard-basic" label="Enter Min" fullWidth={true} />
-                                    <TextField id="standard-basic" label="Enter Max" fullWidth={true}/>
-                                </form>                                                                
-                            </ListItem>
-                            <Divider />
-                            <ListItem button divider>
-                                <Autocomplete
-                                    id="combo-box-demo"
-                                    options={this.state.users}
-                                    getOptionLabel={(option) => option.name}
-                                    style={{ width: 300 }}
-                                    renderInput={(params) => <TextField {...params} label="Select Names" variant="outlined" />}
-                                />
-                            </ListItem>
-                        </List>
-                    </Grid> */}
                     <Grid item xs={12} md={12} lg={12}>
                         <Paper>
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                             <TableCell> <Button onClick={this.sortChange}>{this.renderIcon()}</Button>Date</TableCell>

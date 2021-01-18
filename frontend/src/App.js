@@ -51,7 +51,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div className="container">
+        <div>
           <Navbar/>
           <br/>
           <Route path="/" exact component={Home}/>

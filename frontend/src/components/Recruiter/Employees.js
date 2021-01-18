@@ -285,7 +285,7 @@ class Employees extends Component {
         let nrating = 0;
         if(applicant.rating == -1)
         {
-            nrating = this.state.rating
+            nrating = +this.state.rating;
         }
         else
         {
@@ -345,7 +345,7 @@ class Employees extends Component {
                 <Grid container>
                     <Grid item xs={12} md={12} lg={12}>
                         <Paper>
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Name <Button onClick={this.sortByName}>{this.renderNameIcon()}</Button></TableCell>
@@ -398,7 +398,7 @@ class Employees extends Component {
                                             :
 
                                             <TableCell>
-                                                <div></div>                                           
+                                                <div>Rated</div>                                           
                                             </TableCell>
 
                                             }
@@ -412,7 +412,7 @@ class Employees extends Component {
             </div>
         }
         return (
-            <div style={{ height: "75vh" }} className="container valign-wrapper">
+            <div style={{ height: "75vh" }} className="valign-wrapper">
                 <div className="row">
                     <div className="col s12 center-align">
                         <Card style={{ width: '100%' }}>

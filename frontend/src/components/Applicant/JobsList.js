@@ -82,7 +82,7 @@ class JobsList extends Component {
         {
             durationVal = parseInt(this.state.durationFilterVal);
         }
-        let filteredJobs = this.state.extraJobs;
+        let filteredJobs = this.state.jobs;
         if(jobTypeVal !== "" && jobTypeVal !== undefined)
         {
             filteredJobs = filteredJobs.filter(item => item.type === jobTypeVal);
@@ -245,7 +245,7 @@ class JobsList extends Component {
     applied(job) {
         const { user } = this.props.auth;
         let num = 0;
-        let arr = this.state.applications.filter(item => item.jobId === job._id && item.applicantId === user.id && (item.status !== "Rejected" || item.status != "Accepted"));
+        let arr = this.state.applications.filter(item => item.jobId === job._id && item.applicantId === user.id && (item.status === "Applied" || item.status === "Shortlisted" || item.status === "Accepted"));
         num = arr.length;
         if(num>0) return true;
         else return false;
@@ -253,7 +253,7 @@ class JobsList extends Component {
 
     apply(job)
     {
-        if(this.state.userdetails.numapp > 10)
+        if(this.state.userdetails.numapp >= 10)
         {
             alert("Maximum open applications of 10 reached. Take a break!");
         }
@@ -265,7 +265,6 @@ class JobsList extends Component {
         {
             this.state.showForm = !this.state.showForm;
             this.state.editing = job._id;
-            //this.setState({showform: ShowForm});
             console.log(this.state.showForm);
             this.props.history.push('/jobsList');
             this.props.history.push('/jobsList');
@@ -320,7 +319,7 @@ class JobsList extends Component {
                 })
                 .catch(function(error) {
                     console.log(error);
-                    alert("Applicantion could not be sent.");
+                    alert("Application could not be sent.");
                 })
             axios
                 .put('http://localhost:4000/job/edit_job/' + job._id, editJob)
@@ -340,6 +339,9 @@ class JobsList extends Component {
                 })
             this.state.editing = "";
             window.location.reload();
+        }
+        else {
+            alert("SOP cannot have more than 250 words.");
         }
     }
     
@@ -388,6 +390,16 @@ class JobsList extends Component {
                     <Grid item xs={12} md={12} lg={12}>
                         Filters:
                         <List component="nav" aria-label="mailbox folders">
+                            <select 
+                                value={this.state.jobTypeFilterVal} 
+                                onChange={this.onChange}
+                                id="jobTypeFilterVal"
+                            >
+                                <option value="">Select Job Type</option>
+                                <option value = "fullTime">Full-Time</option>
+                                <option value="partTime">Part-Time</option>
+                                <option value="wfh">Work from home</option>
+                            </select>
                             <TextField 
                                 id="jobTypeFilterVal" 
                                 onChange={this.onChange}
@@ -443,10 +455,9 @@ class JobsList extends Component {
 
                     <Grid item xs={12} md={12} lg={12}>
                         <Paper>
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
-                                            {/* <TableCell> <Button onClick={this.sortChange}>{this.renderIcon()}</Button>Date</TableCell> */}
                                             <TableCell>Title</TableCell>
                                             <TableCell>Recruiter</TableCell>
                                             <TableCell>Type</TableCell>
@@ -463,7 +474,9 @@ class JobsList extends Component {
                                         <TableRow key={ind}>
                                             <TableCell>{job.title}</TableCell>
                                             <TableCell>{job.recruiterName}</TableCell>
-                                            <TableCell>{job.type}</TableCell>
+                                            <TableCell>{job.type == "partTime"? "Part-Time": ""}
+                                            {job.type == "fullTime"? "Full-Time": ""}
+                                            {job.type == "wfh"? "Work from Home": ""}</TableCell>
                                             <TableCell>{job.salary}</TableCell>
                                             <TableCell>{job.duration}</TableCell>
                                             <TableCell>Day-{new Date(job.dateOfPost).getDate()}, Month-{monthNames[new Date(job.dateOfPost).getMonth()]}, Year-{new Date(job.dateOfPost).getFullYear()}</TableCell>
@@ -550,7 +563,7 @@ class JobsList extends Component {
             </div>
         }
         return (
-            <div style={{ height: "75vh" }} className="container valign-wrapper">
+            <div style={{ height: "75vh" }} className="valign-wrapper">
                 <div className="row">
                     <div className="col s12 center-align">
                         <Card style={{ width: '100%' }}>

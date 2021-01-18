@@ -30,6 +30,7 @@ router.post("/add_job", (req, res) => {
     const newJob = new Job({
         recruiter: req.body.recruiter,
         recruiterName: req.body.recruiterName,
+        recruiterEmail: req.body.recruiterEmail,
         title: req.body.title,
         description: req.body.description,
         type: req.body.type,

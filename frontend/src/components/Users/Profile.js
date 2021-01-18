@@ -79,7 +79,7 @@ class Profile extends Component {
         }
         
         // to refresh
-        window.location.reload();
+        this.props.history.push('/profile');
     }
 
     onBack() {
@@ -247,7 +247,6 @@ class Profile extends Component {
         else if(userRole === 'recruiter') {
             UserDetails = 
             <ul>
-                {/* <li>DP: {user.profile_image}</li> */}
                 <li>Bio: {user.bio}</li>
                 <li>Email: {user.email}</li>
                 <li>Contact No.: {user.phone_number}</li>

@@ -111,7 +111,6 @@ class AppList extends Component {
     getapplicant(applicantId)
     {
         let applicant = this.state.users.filter(item => item._id === applicantId)[0];
-        // console.log(applicant);
         return applicant;
     }
 
@@ -170,8 +169,6 @@ class AppList extends Component {
         array.sort(function(a, b) {
             let aapp = getapplicant(a.applicantId);
             let bapp = getapplicant(b.applicantId);
-            // console.log(aapp);
-            // console.log(bapp);
             if(aapp.rating !== undefined && bapp.rating !== undefined){
                 return (1 - +flag*2) * (+aapp.rating - +bapp.rating);
             }
@@ -284,7 +281,7 @@ class AppList extends Component {
             .catch(function(error) {
                 console.log(error);
             })
-        this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id).map((appli,ind) => 
+        this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id && item.status !== "Deleted").forEach((appli) => 
         {
             const editAppli = {
                 status: "Rejected"
@@ -346,8 +343,8 @@ class AppList extends Component {
         if(userRole === "recruiter") {
             Applications =
             <div>
-                <Grid container>
-                <Grid item xs={12} md={3} lg={3}>
+                <Grid>
+                <Grid item xs={12} md={12} lg={12}>
                     <List component="nav" aria-label="mailbox folders">
                         <ListItem text>
                             <h3>Applications</h3>
@@ -355,10 +352,10 @@ class AppList extends Component {
                     </List>
                 </Grid>
                 </Grid>
-                <Grid container>
-                    <Grid item xs={12} md={2} lg={9}>
-                        <Paper>
-                            <Table size="small">
+                <Grid>
+                    <Grid item xs={12} md={12} lg={12}>
+                        {/* <Paper> */}
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                             <TableCell>Title</TableCell>
@@ -369,6 +366,9 @@ class AppList extends Component {
                                             <TableCell>SOP</TableCell>
                                             <TableCell>Status</TableCell>
                                             <TableCell>Date of Application <Button onClick={this.sortByDateOfApply}>{this.renderDateOfApplyIcon()}</Button></TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -466,20 +466,18 @@ class AppList extends Component {
                                     ))}
                                 </TableBody>
                             </Table>
-                        </Paper>               
+                        {/* </Paper>                */}
                     </Grid>    
                 </Grid>            
             </div>
         }
         return (
-            <div style={{ height: "75vh" }} className="container valign-wrapper">
+            <div style={{ height: "75vh" }} className="valign-wrapper">
                 <div className="row">
                     <div className="col s12 center-align">
                         <Card style={{ width: '100%' }}>
                             <Card.Body>
-                                <Card.Text>
-                                    {Applications}
-                                </Card.Text>
+                                {Applications}
                             </Card.Body>
                         </Card>
                     </div>

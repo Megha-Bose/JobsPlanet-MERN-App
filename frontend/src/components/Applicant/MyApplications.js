@@ -125,7 +125,7 @@ class MyApplications extends Component {
         };
 
         const editApplication = {
-            rating: nrating
+            rating: this.state.rating
         };
 
         axios
@@ -172,7 +172,7 @@ class MyApplications extends Component {
                 <Grid container>
                     <Grid item xs={12} md={12} lg={12}>
                         <Paper>
-                            <Table size="small">
+                            <Table>
                                 <TableHead>
                                     <TableRow>
                                             <TableCell>Title</TableCell>
@@ -187,7 +187,7 @@ class MyApplications extends Component {
                                         <TableRow key={ind}>
                                             <TableCell>{application.title}</TableCell>
                                             <TableCell>{application.status}</TableCell>
-                                            <TableCell>{application.doj}</TableCell>
+                                            <TableCell>{application.doj? application.doj.substring(0,10) : ""}</TableCell>
                                             <TableCell>{application.salary}</TableCell>
                                             <TableCell>{application.recruiterName}</TableCell>
                                            
@@ -210,7 +210,7 @@ class MyApplications extends Component {
                                             :
 
                                             <TableCell>
-                                                <div>Rated: {application.rating}</div>                                           
+                                                <div>{application.rating !== -1? "Rated" : ""}</div>                                           
                                             </TableCell>
 
                                             }
@@ -225,7 +225,7 @@ class MyApplications extends Component {
             </div>
         }
         return (
-            <div style={{ height: "75vh" }} className="container valign-wrapper">
+            <div style={{ height: "75vh" }} className="valign-wrapper">
                 <div className="row">
                     <div className="col s12 center-align">
                         <Card style={{ width: '100%' }}>

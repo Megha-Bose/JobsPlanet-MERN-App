@@ -10,6 +10,9 @@ const jobSchema = new Schema({
     recruiterName: {
         type: String,
     },
+    recruiterEmail: {
+        type: String,
+    },
     title: {
         type: String,
         //required: true

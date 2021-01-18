@@ -65,12 +65,11 @@ class AddEducation extends Component {
             axios
                 .put('http://localhost:4000/user/edit_profile/' + user.id, this.state.userDetails)
                 .then(response => {
-                    console.log(this.state.userDetails);
+                    console.log(this.state.userDetails);this.props.history.push('/profile');
                 })
                 .catch(function(error) {
                     console.log(error);
                 })
-            window.location.reload();
         }
     };
 
@@ -133,7 +132,7 @@ class AddEducation extends Component {
             </form>
         }
         return (
-            <div style={{ height: "75vh" }} className="container valign-wrapper">
+            <div style={{ height: "75vh" }} className="valign-wrapper">
                 <div className="row">
                     <div className="col s12 center-align">
                         <Card style={{ width: '100%' }}>

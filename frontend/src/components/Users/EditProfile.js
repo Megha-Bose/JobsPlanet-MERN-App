@@ -15,6 +15,7 @@ class EditProfile extends Component {
         super(props);
         this.state = {
             userdetails: [], 
+            jobs: [],
             name: "",
             email: "",
             password: "",
@@ -25,7 +26,8 @@ class EditProfile extends Component {
             skills: [],
             skillsstring: "",
             nameError: "",
-            emailError: ""
+            emailError: "",
+            bioError: ""
         };
     }
 
@@ -48,11 +50,20 @@ class EditProfile extends Component {
              .catch(function(error) {
                  console.log(error);
              })
+        axios.get('http://localhost:4000/job/get_jobs')
+            .then(response => {
+                this.setState({jobs: response.data});
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
     }
 
     validate = () => {
+        const user = this.state;
         let nameError = "";
         let emailError = "";
+        let bioError = "";
     
         if (!this.state.name) {
           nameError = "Name cannot be blank";
@@ -65,6 +76,17 @@ class EditProfile extends Component {
         if (emailError || nameError) {
           this.setState({ emailError, nameError });
           return false;
+        }
+
+        if(user.role === "recruiter")
+        {
+            let num = this.state.bio.split(' ').length;
+            if(num > 250)
+            {
+                bioError = "Bio cannot have more than 250 words.";
+                this.setState({ bioError });
+                return false;
+            }
         }
     
         return true;
@@ -103,12 +125,26 @@ class EditProfile extends Component {
             axios
                 .put('http://localhost:4000/user/edit_profile/' + user.id, editedUser)
                 .then(response => {
-                    console.log(editedUser);
+                    console.log(editedUser);this.props.history.push('/profile');
                 })
                 .catch(function(error) {
                     console.log(error);
                 })
-            window.location.reload();
+            this.state.jobs.filter(item => item.recruiter === user.id).forEach((jobb) => 
+            {
+                const editJob = {
+                    recruiterName: euser.name,
+                    recruiterEmail: euser.email
+                }
+                axios
+                    .put('http://localhost:4000/job/edit_job/' + jobb._id, editJob)
+                    .then(response => {
+                        console.log(editJob);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+            })
         }
     };
 
@@ -173,7 +209,7 @@ class EditProfile extends Component {
             EditUserDetails = 
             <form noValidate onSubmit={this.onSubmit}>
                 <div className="input-field col s12">
-                    {/* <label htmlFor="name">Name</label><br></br>
+                    <label htmlFor="name">Name</label><br></br>
                     <input
                         onChange={this.onChange}
                         value={user.name}
@@ -182,7 +218,7 @@ class EditProfile extends Component {
                     />
                     <div style={{ fontSize: 12, color: "red" }}>
                         {this.state.nameError}
-                    </div> */}
+                    </div>
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="bio">Bio.</label><br></br>
@@ -192,6 +228,9 @@ class EditProfile extends Component {
                         id="bio"
                         type="text"
                     />
+                    <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.bioError}
+                    </div>
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="phone_number">Phone no.</label><br></br>
@@ -231,7 +270,7 @@ class EditProfile extends Component {
             </form>
         }
         return (
-            <div style={{ height: "75vh" }} className="container valign-wrapper">
+            <div style={{ height: "75vh" }} className="valign-wrapper">
                 <div className="row">
                     <div className="col s12 center-align">
                         <Card style={{ width: '100%' }}>
