@@ -12,8 +12,6 @@ import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
@@ -24,11 +22,6 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-
-
 
 class JobsList extends Component {
     
@@ -41,7 +34,7 @@ class JobsList extends Component {
             applications: [],
             sortName:true, 
             recruiterName: "",
-            showForm: false,
+            showform: false,
             editing: "",
             enteredsop: "",
             sopError: "",
@@ -62,6 +55,8 @@ class JobsList extends Component {
         this.sortByRating = this.sortByRating.bind(this);
         this.onSearch = this.onSearch.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.apply = this.apply.bind(this);
+        this.onSOPsubmit = this.onSOPsubmit.bind(this);
     }
 
     onLogoutClick = e => {
@@ -117,9 +112,7 @@ class JobsList extends Component {
 
     componentDidMount() {
         const { user } = this.props.auth;
-        this.state.showForm = false;
-        this.state.editing = "";
-        this.state.enteredsop = "";
+        this.setState({ showform : false });
         axios.get('http://localhost:4000/user/'+ user.id)
                 .then(response => {
                     this.setState({userdetails: response.data});
@@ -257,15 +250,17 @@ class JobsList extends Component {
         {
             alert("Maximum open applications of 10 reached. Take a break!");
         }
-        else if(this.state.userdetails.working == true)
+        else if(this.state.userdetails.working === true)
         {
             alert("You are already accepted into one of the jobs you applied for. Check My Applications page.");
         }
         else
         {
-            this.state.showForm = !this.state.showForm;
-            this.state.editing = job._id;
-            console.log(this.state.showForm);
+            let show = !this.state.showform;
+            this.setState({ showform : show });
+            let editid = job._id;
+            this.setState({ editing : editid });
+            console.log(this.state.showform);
             this.props.history.push('/jobsList');
             this.props.history.push('/jobsList');
             this.props.history.goBack();
@@ -337,7 +332,7 @@ class JobsList extends Component {
                 .catch(function(error) {
                     console.log(error);
                 })
-            this.state.editing = "";
+                this.setState({ editting : "" });
             window.location.reload();
         }
         else {
@@ -474,9 +469,9 @@ class JobsList extends Component {
                                         <TableRow key={ind}>
                                             <TableCell>{job.title}</TableCell>
                                             <TableCell>{job.recruiterName}</TableCell>
-                                            <TableCell>{job.type == "partTime"? "Part-Time": ""}
-                                            {job.type == "fullTime"? "Full-Time": ""}
-                                            {job.type == "wfh"? "Work from Home": ""}</TableCell>
+                                            <TableCell>{job.type === "partTime"? "Part-Time": ""}
+                                            {job.type === "fullTime"? "Full-Time": ""}
+                                            {job.type === "wfh"? "Work from Home": ""}</TableCell>
                                             <TableCell>{job.salary}</TableCell>
                                             <TableCell>{job.duration}</TableCell>
                                             <TableCell>Day-{new Date(job.dateOfPost).getDate()}, Month-{monthNames[new Date(job.dateOfPost).getMonth()]}, Year-{new Date(job.dateOfPost).getFullYear()}</TableCell>
@@ -530,7 +525,7 @@ class JobsList extends Component {
 
                                             }
 
-                                            {this.state.showForm === true && job._id === this.state.editing?
+                                            {this.state.showform === true && job._id === this.state.editing?
                                             <TableCell>
                                                 <div>
                                                     <div className="input-field">

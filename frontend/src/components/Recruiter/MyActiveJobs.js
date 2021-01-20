@@ -35,6 +35,9 @@ class MyActiveJobs extends Component {
             deadline: new Date(),
             editing: ""
         };
+        this.deljob = this.deljob.bind(this);
+        this.editJob = this.editJob.bind(this);
+        this.editJobSubmit = this.editJobSubmit.bind(this);
     }
 
     onLogoutClick = e => {
@@ -47,7 +50,6 @@ class MyActiveJobs extends Component {
     };
 
     componentDidMount() {
-        this.state.showform = false;
         const { user } = this.props.auth;
         axios.get('http://localhost:4000/user/'+ user.id)
                 .then(response => {
@@ -89,43 +91,47 @@ class MyActiveJobs extends Component {
     }
 
     deljob(id) {
-        this.state.applications.filter(item => item.jobId === id).forEach((appli) => 
-        {
-            let applicant = this.state.users.filter(item => item._id === appli.applicantId)[0];
-            let nnumapp = +applicant.numapp;
-
-            if(applicant.working == false)
+        let applicationsArray = this.state.applications;
+        let usersArray = this.state.users;
+        applicationsArray.filter(item => item.jobId === id).forEach(
+            function(appli) 
             {
-                nnumapp = nnumapp - 1;
-            }
+                let applicant = usersArray.filter(item => item._id === appli.applicantId)[0];
+                let nnumapp = +applicant.numapp;
 
-            const editApplicant = {
-                numapp: nnumapp
-            };
+                if(applicant.working === false)
+                {
+                    nnumapp = +nnumapp - 1;
+                }
 
-            axios
-                .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editApplicant)
-                .then(response => {
-                    console.log(editApplicant);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
+                const editApplicant = {
+                    numapp: nnumapp
+                };
 
-            const editAppli = {
-                status: "Deleted"
-            }
-            axios
-                .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
-                .then(response => {
-                    console.log(editAppli);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-        })
+                axios
+                    .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editApplicant)
+                    .then(response => {
+                        console.log(editApplicant);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
 
-        this.state.applications.filter(item => item.jobId === id && item.status === "Accepted").forEach((appli) => 
+                const editAppli = {
+                    status: "Deleted"
+                }
+
+                axios
+                    .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
+                    .then(response => {
+                        console.log(editAppli);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+            })
+
+        applicationsArray.filter(item => item.jobId === id && item.status === "Accepted").forEach(function(appli) 
         {
             const editEmployee = {
                 working: false
@@ -154,24 +160,26 @@ class MyActiveJobs extends Component {
     }
 
     editJob(job) {
-        this.state.showform = !this.state.showform;
-        this.state.editing = job._id;
+        let show = !this.state.showform;
+        this.setState({ showform: show});
+        this.setState({ editing: job._id });
         console.log(this.state.showform);
-        this.state.appmax = job.appmax;
-        this.state.posmax = job.posmax;
+        this.setState({ appmax: job.appmax });
+        this.setState({ posmax: job.posmax });
         if(job.deadline)
         {
             job.deadline = job.deadline.toString();
             job.deadline = job.deadline.substring(0,10);
-            this.state.deadline = job.deadline;
+            this.setState({ deadline: job.deadline });
         }
         // to refresh
         this.props.history.push('/viewMyActiveJobs');
     }
 
     onBack() {
-        this.state.showform = !this.state.showform;
-        this.state.editing = "";
+        let show = !this.state.showform;
+        this.setState({ showform: show});
+        this.setState({ editing: "" });
         
         // to refresh
         this.props.history.push('/viewMyActiveJobs');
@@ -190,7 +198,7 @@ class MyActiveJobs extends Component {
             .put('http://localhost:4000/job/edit_job/' + idToChange, this.state.jobs[ind])
             .then(response => {
                 console.log(this.state.jobs[ind]);
-                this.state.editing = "";
+                this.setState({ editing: "" });
             })
             .catch(function(error) {
                 alert("Job couldn't be updated!");
@@ -198,7 +206,8 @@ class MyActiveJobs extends Component {
             })
         // to refresh
         
-        this.state.showform = !this.state.showform;
+        let show = !this.state.showform;
+        this.setState({ showform: show});
         window.location.reload();
     }
 

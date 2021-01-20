@@ -23,8 +23,14 @@ class Profile extends Component {
             school: "",
             degree: "",
             startdate: new Date(),
+            file: null
             // enddate: new Date(),
         };
+        this.delEducation = this.delEducation.bind(this);
+        this.editEducation = this.editEducation.bind(this);
+        this.editEducationSubmit = this.editEducationSubmit.bind(this);
+        this.editResumeSubmit = this.onResumeSubmit.bind(this);
+        this.onBack = this.onBack.bind(this);
     }
 
     onChange = e => {
@@ -33,7 +39,6 @@ class Profile extends Component {
 
     componentDidMount() {
         const { user } = this.props.auth;
-        this.state.showform = false;
         axios.get('http://localhost:4000/user/'+ user.id)
              .then(response => {
                  this.setState({userdetails: response.data});
@@ -41,6 +46,23 @@ class Profile extends Component {
              .catch(function(error) {
                  console.log(error);
              })
+    }
+
+    onResumeSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('myfile',this.state.file);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        };
+        axios.post("http://localhost:4000/upload/",formData,config)
+            .then((response) => {
+                alert("The file is successfully uploaded.");
+            }).catch((error) => {
+                alert(error);
+        });
     }
 
     delEducation(ed) {
@@ -60,22 +82,24 @@ class Profile extends Component {
     }
 
     editEducation(ed) {
-        this.state.showform = !this.state.showform;
-        this.state.editing = ed._id;
+        let show = !this.state.showform;
+        this.setState({showform: show});
+        let editid = ed._id;
+        this.setState({editing: editid});
         console.log(this.state.showform);
-        this.state.school = ed.school;
-        this.state.degree = ed.degree;
+        this.setState({ school: ed.school });
+        this.setState({ degree: ed.degree });
         if(ed.startdate)
         {
             ed.startdate = ed.startdate.toString();
             ed.startdate = ed.startdate.substring(0,10);
-            this.state.startdate = ed.startdate;
+            this.setState({ startdate: ed.startdate });
         }
         if(ed.enddate)
         {
             ed.enddate = ed.enddate.toString();
             ed.enddate = ed.enddate.substring(0,10);
-            this.state.enddate = ed.enddate;
+            this.setState({ enddate: ed.enddate });
         }
         
         // to refresh
@@ -83,8 +107,9 @@ class Profile extends Component {
     }
 
     onBack() {
-        this.state.showform = !this.state.showform;
-        this.state.editing = "";
+        let show = !this.state.showform;
+        this.setState({ showform: show});
+        this.setState({ editing: "" });
         
         // to refresh
         window.location.reload();
@@ -93,7 +118,7 @@ class Profile extends Component {
     editEducationSubmit(ed) {
         const { user } = this.props.auth;
         const idToChange = ed._id;
-        this.state.editing = "";
+        this.setState({ editing: "" });
         const ind = this.state.userdetails.education.findIndex(x => x._id === idToChange)
         if(this.state.school !== "")
             this.state.userdetails.education[ind].school = this.state.school;
@@ -110,7 +135,8 @@ class Profile extends Component {
                 console.log(error);
             })
         // to refresh
-        this.state.showform = !this.state.showform;
+        let show = !this.state.showform;
+        this.setState({ showform: show});
         window.location.reload();
     }
 
@@ -242,6 +268,12 @@ class Profile extends Component {
                         </ul>
                     </li>
                 </ul>
+                <hr></hr>
+                <form onSubmit={this.onResumeSubmit}>
+                    <h6><b>Resume Upload:</b></h6>
+                    <input type="file" id="file" style={{ display: "hidden" }} onChange={this.onChange} />
+                    <button className="upload-button" type="submit">Upload</button>
+                </form>
             </div>
         }
         else if(userRole === 'recruiter') {

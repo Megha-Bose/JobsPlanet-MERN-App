@@ -23,6 +23,7 @@ class CreateJob extends Component {
             salaryError: "",
             posmax: 1,
             appmax: 10,
+            appmaxError: "",
             numpos: 0,
             numapp: 0,
             app: 0,
@@ -57,6 +58,7 @@ class CreateJob extends Component {
         let salaryError = "";
         let addressError = "";
         let deadlineError = "";
+        let appmaxError = "";
 
     
         if (this.state.title === "") {
@@ -82,10 +84,14 @@ class CreateJob extends Component {
         if (new Date(this.state.deadline) < new Date().getTime()) {
             deadlineError = "Deadline cannot be before tomorrow";
         }
+
+        if (this.state.appmax < this.state.posmax) {
+            appmaxError = "Maximum number of applications cannot be less than maximum number of positions.";
+        }
     
         if (titleError || typeError || durationError || salaryError
-            || addressError || deadlineError) {
-            this.setState({ titleError, typeError, durationError, salaryError, addressError, deadlineError });
+            || addressError || deadlineError || appmaxError) {
+            this.setState({ titleError, typeError, durationError, salaryError, addressError, deadlineError, appmaxError });
             return false;
         }
     
@@ -253,9 +259,9 @@ class CreateJob extends Component {
                         type="number"
                         min="0"
                     />
-                    {/* <div style={{ fontSize: 12, color: "red" }}>
-                        {this.state.nameError}
-                    </div> */}
+                    <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.appmaxError}
+                    </div>
                 </div>
                 <div className="input-field col s12">
                     <label htmlFor="address">Address</label><br></br>

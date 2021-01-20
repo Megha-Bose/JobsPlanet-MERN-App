@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -8,26 +7,15 @@ import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import SearchIcon from "@material-ui/icons/Search";
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-
 
 
 class AppList extends Component {
@@ -239,7 +227,12 @@ class AppList extends Component {
 
     accept(application) {
         let job = this.getjob(application.jobId);
-        let nnumpos = job.numpos + 1;
+        if(job.numpos == job.posmax)
+        {
+            alert("All positions are filled!");
+            return;
+        }
+        let nnumpos = +job.numpos + 1;
 
         const editApplicant = {
             working: true,
@@ -281,20 +274,21 @@ class AppList extends Component {
             .catch(function(error) {
                 console.log(error);
             })
-        this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id && item.status !== "Deleted").forEach((appli) => 
-        {
-            const editAppli = {
-                status: "Rejected"
-            }
-            axios
-                .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
-                .then(response => {
-                    console.log(editAppli);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-        })
+        this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id && item.status !== "Deleted").forEach(
+            function(appli)
+            {
+                const editAppli = {
+                    status: "Rejected"
+                }
+                axios
+                    .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
+                    .then(response => {
+                        console.log(editAppli);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+            })
 
         window.location.reload();
     }
@@ -372,7 +366,7 @@ class AppList extends Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.applications.filter(item => item.status !== "Rejected" && item.recruiterId == user.id && item.jobId == this.props.location.state).map((application,ind) => (
+                                    {this.state.applications.filter(item => item.status !== "Rejected" && item.recruiterId === user.id && item.jobId === this.props.location.state).map((application,ind) => (
                                         <TableRow key={ind}>
                                             <TableCell>{application.title}</TableCell>
                                             {this.state.users.filter(item => item._id === application.applicantId).map((applicant,innd) => (

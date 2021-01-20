@@ -7,28 +7,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListItem from '@material-ui/core/ListItem';
 import Rating from '@material-ui/lab/Rating';
-import Divider from '@material-ui/core/Divider';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import SearchIcon from "@material-ui/icons/Search";
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-
 
 
 class MyApplications extends Component {
@@ -105,12 +90,11 @@ class MyApplications extends Component {
 
     rate(application)
     {
-        const { user } = this.props.auth;
         let job = this.getjob(application.jobId);
         let nrate = job.numrate;
         nrate = nrate + 1;
         let nrating = 0;
-        if(job.rating == -1)
+        if(job.rating === -1)
         {
             nrating = this.state.rating
         }

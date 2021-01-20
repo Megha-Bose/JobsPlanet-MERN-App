@@ -8,28 +8,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Rating from '@material-ui/lab/Rating';
 import List from '@material-ui/core/List';
 import Tooltip from '@material-ui/core/Tooltip';
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import SearchIcon from "@material-ui/icons/Search";
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-
-
 
 class Employees extends Component {
     
@@ -277,13 +265,12 @@ class Employees extends Component {
 
     rate(application)
     {
-        const { user } = this.props.auth;
         let applicant = this.getapplicant(application.applicantId);
         console.log(applicant._id);
         let nrate = applicant.numrate;
         nrate = nrate + 1;
         let nrating = 0;
-        if(applicant.rating == -1)
+        if(applicant.rating === -1)
         {
             nrating = +this.state.rating;
         }
@@ -356,7 +343,7 @@ class Employees extends Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.applications.filter(item => item.status === "Accepted" && item.recruiterId == user.id).map((application,ind) => (
+                                    {this.state.applications.filter(item => item.status === "Accepted" && item.recruiterId === user.id).map((application,ind) => (
                                         <TableRow key={ind}>
                                             
                                             {this.state.users.filter(item => item._id === application.applicantId).map((applicant,innd) => (

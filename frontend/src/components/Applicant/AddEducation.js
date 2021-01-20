@@ -56,9 +56,19 @@ class AddEducation extends Component {
             startdate: this.state.startdate,
             enddate: this.state.enddate
         };
+        var g1,g2;
+        if(newEducation.startdate && newEducation.enddate)
+        {
+            g1 = new Date(newEducation.startdate); 
+            g2 = new Date(newEducation.enddate); 
+        }
         if(!newEducation.startdate || newEducation.school === "" || newEducation.degree === "")
         {
             alert("School, Degree and Start Date are required!");
+        }
+        else if(newEducation.enddate && g2<g1)
+        {
+            alert("End date cannot be before start date.");
         }
         else{
             this.state.userDetails.education.push(newEducation);

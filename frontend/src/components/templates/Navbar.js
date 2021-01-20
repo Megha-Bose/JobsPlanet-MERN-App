@@ -4,11 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { Navbar, Nav } from 'react-bootstrap';
 
 export default class NavBar extends Component {
-    
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <Navbar bg="light" expand="lg">
