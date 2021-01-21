@@ -277,13 +277,26 @@ class AppList extends Component {
         this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id && item.status !== "Deleted").forEach(
             function(appli)
             {
+                let appliJob = this.state.jobs.filter(item => item._id === appli.jobId)[0];
                 const editAppli = {
                     status: "Rejected"
+                }
+                let napp = +appliJob.numapp - 1;
+                const editAppliJob = {
+                    numapp: napp
                 }
                 axios
                     .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
                     .then(response => {
                         console.log(editAppli);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+                axios
+                    .put('http://localhost:4000/job/edit_job/' + appliJob._id, editAppliJob)
+                    .then(response => {
+                        console.log(editAppliJob);
                     })
                     .catch(function(error) {
                         console.log(error);

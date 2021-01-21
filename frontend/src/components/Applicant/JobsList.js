@@ -382,7 +382,7 @@ class JobsList extends Component {
                         id="searchval" 
                         onChange={this.onChange}
                         value={this.state.searchval}
-                        placeholder="Search"
+                        placeholder="Fuzzy Search"
                         fullWidth={true}   
                         InputProps={{
                             endAdornment: (
