@@ -16,7 +16,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const passport = require("passport");
-const multer = require("multer");
 
 const app = express();
 
@@ -52,39 +51,6 @@ app.use("/testAPI", testAPIRouter);
 app.use("/user", UserRouter);
 app.use("/job", JobRouter);
 app.use("/application", ApplicationRouter);
-
-
-
-const path = require("path");
-const router = express.Router();
-
-app.use(express.static(path.join(__dirname, "./public/")));
-
-const File = require("./models/file.model");
-
-const storage = multer.diskStorage({
-    destination: "./public/",
-    filename: function(req, file, cb){
-       cb(null,"IMAGE-" + Date.now() + path.extname(file.originalname));
-    }
-});
- 
-const upload = multer({
-    storage: storage,
-    limits:{fileSize: 1000000},
-}).single("myfile");
-
-router.post("/upload", (req,res) => {
-    upload(req, res, () => {
-        console.log("Request ---", req.body);
-        console.log("Request file ---", req.file);
-        const file = new File();
-        file.meta_data = req.file;
-        file.save().then(()=>{
-            res.send({message:"file uploaded successfully"})
-        })
-    });
-});
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);

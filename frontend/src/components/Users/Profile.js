@@ -29,7 +29,6 @@ class Profile extends Component {
         this.delEducation = this.delEducation.bind(this);
         this.editEducation = this.editEducation.bind(this);
         this.editEducationSubmit = this.editEducationSubmit.bind(this);
-        this.editResumeSubmit = this.onResumeSubmit.bind(this);
         this.onBack = this.onBack.bind(this);
     }
 
@@ -46,23 +45,6 @@ class Profile extends Component {
              .catch(function(error) {
                  console.log(error);
              })
-    }
-
-    onResumeSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('myfile',this.state.file);
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        };
-        axios.post("http://localhost:4000/upload/",formData,config)
-            .then((response) => {
-                alert("The file is successfully uploaded.");
-            }).catch((error) => {
-                alert(error);
-        });
     }
 
     delEducation(ed) {
@@ -268,12 +250,6 @@ class Profile extends Component {
                         </ul>
                     </li>
                 </ul>
-                <hr></hr>
-                <form onSubmit={this.onResumeSubmit}>
-                    <h6><b>Resume Upload:</b></h6>
-                    <input type="file" id="file" style={{ display: "hidden" }} onChange={this.onChange} />
-                    <button className="upload-button" type="submit">Upload</button>
-                </form>
             </div>
         }
         else if(userRole === 'recruiter') {

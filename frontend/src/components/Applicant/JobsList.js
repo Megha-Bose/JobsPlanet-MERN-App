@@ -22,6 +22,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
+import Fuse from 'fuse.js';
 
 class JobsList extends Component {
     
@@ -106,7 +107,23 @@ class JobsList extends Component {
         }
         else
         {
+            const options = {
+                keys: ["title"]
+            };
+            const fuse = new Fuse(this.state.extraJobs, options);
+            let result = fuse.search(sval);
+            
             this.setState({ jobs : this.state.extraJobs.filter(item => item.title.includes(sval)) });
+            let n = result.length;
+            let i = 0;
+            let res = [];
+            for( i = 0; i < n; i++) {
+                res.push(result[i].item);
+            }
+            // console.log(res);
+            this.setState({ jobs : res });
+            // console.log(this.state.jobs);
+            
         }
     };
 
