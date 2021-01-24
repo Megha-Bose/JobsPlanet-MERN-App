@@ -38,6 +38,7 @@ class AppList extends Component {
         this.sortByName = this.sortByName.bind(this);
         this.sortByDateOfApply = this.sortByDateOfApply.bind(this);
         this.sortByRating = this.sortByRating.bind(this);
+        this.accept = this.accept.bind(this);
     }
 
     onLogoutClick = e => {
@@ -222,7 +223,7 @@ class AppList extends Component {
             .catch(function(error) {
                 console.log(error);
             })
-        window.location.reload();
+            window.location.reload();
     }
 
     accept(application) {
@@ -274,10 +275,11 @@ class AppList extends Component {
             .catch(function(error) {
                 console.log(error);
             })
+        let alljobs = this.state.jobs;
         this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id && item.status !== "Deleted").forEach(
             function(appli)
             {
-                let appliJob = this.state.jobs.filter(item => item._id === appli.jobId)[0];
+                let appliJob = alljobs.filter(item => item._id === appli.jobId)[0];
                 const editAppli = {
                     status: "Rejected"
                 }
@@ -303,14 +305,16 @@ class AppList extends Component {
                     })
             })
 
-        window.location.reload();
+            window.location.reload();
     }
 
     reject(application) {
         // const { user } = this.props.auth;
         // let job = this.getjob(application.jobId);
         let applicant = this.getapplicant(application.applicantId);
+        let job = this.getjob(application.jobId);
         let nnumapp = +applicant.numapp - 1;
+        let jnumapp = +job.numapp - 1;
 
         const editApplicant = {
             numapp: nnumapp
@@ -320,10 +324,23 @@ class AppList extends Component {
             status: "Rejected"
         };
 
+        const editJob = {
+            numapp: jnumapp
+        };
+
         axios
             .put('http://localhost:4000/application/edit_application/' + application._id, editApplication)
             .then(response => {
                 console.log(editApplication);
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
+
+        axios
+            .put('http://localhost:4000/job/edit_job/' + job._id, editJob)
+            .then(response => {
+                console.log(editJob);
             })
             .catch(function(error) {
                 console.log(error);
@@ -338,7 +355,7 @@ class AppList extends Component {
                 console.log(error);
             })
 
-        window.location.reload();
+            window.location.reload();
        
     }
 

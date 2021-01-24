@@ -85,7 +85,7 @@ class Profile extends Component {
         }
         
         // to refresh
-        this.props.history.push('/profile');
+        // this.props.history.push('/profile');
     }
 
     onBack() {
@@ -107,19 +107,25 @@ class Profile extends Component {
         if(this.state.degree !== "")
             this.state.userdetails.education[ind].degree = this.state.degree;
         this.state.userdetails.education[ind].startdate = this.state.startdate;
-        this.state.userdetails.education[ind].enddate = this.state.enddate;
-        axios
-            .put('http://localhost:4000/user/edit_profile/' + user.id, this.state.userdetails)
-            .then(response => {
-                console.log(this.state.userdetails);
-            })
-            .catch(function(error) {
-                console.log(error);
-            })
-        // to refresh
+        if(this.state.enddate && new Date(this.state.enddate) <= new Date(this.state.startdate))
+        {
+            alert("End date ahould be after start date.");
+        }
+        else {
+            this.state.userdetails.education[ind].enddate = this.state.enddate;
+            axios
+                .put('http://localhost:4000/user/edit_profile/' + user.id, this.state.userdetails)
+                .then(response => {
+                    console.log(this.state.userdetails);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
+            // to refresh
+        }
         let show = !this.state.showform;
         this.setState({ showform: show});
-        window.location.reload();
+        // window.location.reload();
     }
 
     render() {

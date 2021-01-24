@@ -11,7 +11,7 @@ import {
 export const registerUser = (userData, history) => dispatch => {
     axios
         .post("http://localhost:4000/user/register", userData)
-        .then(res => alert("User registered successfully! You can log in now. "),history.push("/register"),history.push("/login")) // re-direct to login on successful register
+        .then(res => alert("User registered successfully! You can log in now. "),history.push("/register")) // re-direct to login on successful register
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,

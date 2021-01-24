@@ -78,7 +78,7 @@ class JobsList extends Component {
         {
             durationVal = parseInt(this.state.durationFilterVal);
         }
-        let filteredJobs = this.state.jobs;
+        let filteredJobs = this.state.extraJobs;
         if(jobTypeVal !== "" && jobTypeVal !== undefined)
         {
             filteredJobs = filteredJobs.filter(item => item.type === jobTypeVal);
@@ -412,13 +412,13 @@ class JobsList extends Component {
                                 <option value="partTime">Part-Time</option>
                                 <option value="wfh">Work from home</option>
                             </select>
-                            <TextField 
+                            {/* <TextField 
                                 id="jobTypeFilterVal" 
                                 onChange={this.onChange}
                                 value={this.state.jobTypeFilterVal}
                                 placeholder="Job Type"
                                 fullWidth={true}   
-                            />
+                            /> */}
                         </List>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12}>
