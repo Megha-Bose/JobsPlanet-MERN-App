@@ -169,7 +169,7 @@ class Employees extends Component {
             console.log(a.applicantId);
             let aapp = getapplicant(a.applicantId);
             let bapp = getapplicant(b.applicantId);
-            if(aapp != undefined && bapp != undefined && aapp.name !== undefined && bapp.name !== undefined){
+            if(aapp !== undefined && bapp !== undefined && aapp.name !== undefined && bapp.name !== undefined){
                 return (1 - +flag*2) * aapp.name.localeCompare(bapp.name);
             }
             else{

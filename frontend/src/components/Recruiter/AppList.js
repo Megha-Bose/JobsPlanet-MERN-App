@@ -228,7 +228,7 @@ class AppList extends Component {
 
     accept(application) {
         let job = this.getjob(application.jobId);
-        if(job.numpos == job.posmax)
+        if(job.numpos === job.posmax)
         {
             alert("All positions are filled!");
             return;
@@ -305,7 +305,9 @@ class AppList extends Component {
                     })
             })
 
-            window.location.reload();
+        this.props.history.push('/appList');
+        this.props.history.push('/appList');
+        this.props.history.goBack();
     }
 
     reject(application) {
@@ -355,8 +357,9 @@ class AppList extends Component {
                 console.log(error);
             })
 
-            window.location.reload();
-       
+        this.props.history.push('/appList');
+        this.props.history.push('/appList');
+        this.props.history.goBack();;
     }
 
     render() 

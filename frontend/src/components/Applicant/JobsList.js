@@ -110,10 +110,10 @@ class JobsList extends Component {
             const options = {
                 keys: ["title"]
             };
-            const fuse = new Fuse(this.state.extraJobs, options);
+            const fuse = new Fuse(this.state.jobs, options);
             let result = fuse.search(sval);
             
-            this.setState({ jobs : this.state.extraJobs.filter(item => item.title.includes(sval)) });
+            // this.setState({ jobs : this.state.extraJobs.filter(item => item.title.includes(sval)) });
             let n = result.length;
             let i = 0;
             let res = [];
@@ -350,6 +350,9 @@ class JobsList extends Component {
                     console.log(error);
                 })
                 this.setState({ editting : "" });
+            this.props.history.push('/jobsList');
+            this.props.history.push('/jobsList');
+            this.props.history.goBack();
             window.location.reload();
         }
         else {
