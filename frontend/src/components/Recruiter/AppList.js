@@ -238,15 +238,15 @@ class AppList extends Component {
             this.state.applications.filter(item => item.applicantId !== application.applicantId && item.jobId === application.jobId && item.status !== "Deleted" && item.status !== "Accepted").forEach(
                 function(appli)
                 {
-                    let temp = job;
+                    // let temp = job;
                     const tempAppli = {
                         status: "Rejected"
                     }
-                    let newNumApp = +temp.numapp - 1;
-                    if(newNumApp < 0) newNumApp = 0;
-                    const tempJob = {
-                        numapp: newNumApp
-                    }
+                    // let newNumApp = +temp.numapp - 1;
+                    // if(newNumApp < 0) newNumApp = 0;
+                    // const tempJob = {
+                    //     numapp: newNumApp
+                    // }
                     axios
                         .put('http://localhost:4000/application/edit_application/' + appli._id, tempAppli)
                         .then(response => {
@@ -255,14 +255,14 @@ class AppList extends Component {
                         .catch(function(error) {
                             console.log(error);
                         })
-                    axios
-                        .put('http://localhost:4000/job/edit_job/' + temp._id, tempJob)
-                        .then(response => {
-                            console.log(tempJob);
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        })
+                    // axios
+                    //     .put('http://localhost:4000/job/edit_job/' + temp._id, tempJob)
+                    //     .then(response => {
+                    //         console.log(tempJob);
+                    //     })
+                    //     .catch(function(error) {
+                    //         console.log(error);
+                    //     })
                 })
         }
         let nnumpos = +job.numpos + 1;
@@ -311,15 +311,15 @@ class AppList extends Component {
         this.state.applications.filter(item => item.applicantId === application.applicantId && item._id !== application._id && item.status !== "Deleted").forEach(
             function(appli)
             {
-                let appliJob = alljobs.filter(item => item._id === appli.jobId)[0];
+                // let appliJob = alljobs.filter(item => item._id === appli.jobId)[0];
                 const editAppli = {
                     status: "Rejected"
                 }
-                let napp = +appliJob.numapp - 1;
-                if(napp < 0) napp = 0;
-                const editAppliJob = {
-                    numapp: napp
-                }
+                // let napp = +appliJob.numapp - 1;
+                // if(napp < 0) napp = 0;
+                // const editAppliJob = {
+                //     numapp: napp
+                // }
                 axios
                     .put('http://localhost:4000/application/edit_application/' + appli._id, editAppli)
                     .then(response => {
@@ -328,14 +328,14 @@ class AppList extends Component {
                     .catch(function(error) {
                         console.log(error);
                     })
-                axios
-                    .put('http://localhost:4000/job/edit_job/' + appliJob._id, editAppliJob)
-                    .then(response => {
-                        console.log(editAppliJob);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    })
+                // axios
+                //     .put('http://localhost:4000/job/edit_job/' + appliJob._id, editAppliJob)
+                //     .then(response => {
+                //         console.log(editAppliJob);
+                //     })
+                //     .catch(function(error) {
+                //         console.log(error);
+                //     })
             })
 
         this.props.history.push('/appList');
@@ -347,12 +347,12 @@ class AppList extends Component {
         // const { user } = this.props.auth;
         // let job = this.getjob(application.jobId);
         let applicant = this.getapplicant(application.applicantId);
-        let job = this.getjob(application.jobId);
+        // let job = this.getjob(application.jobId);
         let nnumapp = +applicant.numapp - 1;
-        let jnumapp = +job.numapp - 1;
+        // let jnumapp = +job.numapp - 1;
 
         if(nnumapp < 0) nnumapp = 0;
-        if(jnumapp < 0) jnumapp = 0;
+        // if(jnumapp < 0) jnumapp = 0;
 
         const editApplicant = {
             numapp: nnumapp
@@ -362,9 +362,9 @@ class AppList extends Component {
             status: "Rejected"
         };
 
-        const editJob = {
-            numapp: jnumapp
-        };
+        // const editJob = {
+        //     numapp: jnumapp
+        // };
 
         axios
             .put('http://localhost:4000/application/edit_application/' + application._id, editApplication)
@@ -375,14 +375,14 @@ class AppList extends Component {
                 console.log(error);
             })
 
-        axios
-            .put('http://localhost:4000/job/edit_job/' + job._id, editJob)
-            .then(response => {
-                console.log(editJob);
-            })
-            .catch(function(error) {
-                console.log(error);
-            })
+        // axios
+        //     .put('http://localhost:4000/job/edit_job/' + job._id, editJob)
+        //     .then(response => {
+        //         console.log(editJob);
+        //     })
+        //     .catch(function(error) {
+        //         console.log(error);
+        //     })
         
         axios
             .put('http://localhost:4000/user/edit_profile/' + application.applicantId, editApplicant)

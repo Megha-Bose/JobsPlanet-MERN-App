@@ -255,7 +255,7 @@ class MyActiveJobs extends Component {
                                     <TableRow>
                                             <TableCell>Title</TableCell>
                                             <TableCell>Date of posting</TableCell>
-                                            <TableCell>Number of Open Applications</TableCell>
+                                            <TableCell>Number of Applicants</TableCell>
                                             <TableCell>Remaining Number of Positions</TableCell>
                                             <TableCell></TableCell>
                                     </TableRow>
