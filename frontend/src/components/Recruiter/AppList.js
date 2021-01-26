@@ -233,6 +233,38 @@ class AppList extends Component {
             alert("All positions are filled!");
             return;
         }
+        else if(job.numpos === job.posmax - 1)
+        {
+            this.state.applications.filter(item => item.applicantId !== application.applicantId && item.jobId === application.jobId && item.status !== "Deleted" && item.status !== "Accepted").forEach(
+                function(appli)
+                {
+                    let temp = job;
+                    const tempAppli = {
+                        status: "Rejected"
+                    }
+                    let newNumApp = +temp.numapp - 1;
+                    if(newNumApp < 0) newNumApp = 0;
+                    const tempJob = {
+                        numapp: newNumApp
+                    }
+                    axios
+                        .put('http://localhost:4000/application/edit_application/' + appli._id, tempAppli)
+                        .then(response => {
+                            console.log(tempAppli);
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
+                    axios
+                        .put('http://localhost:4000/job/edit_job/' + temp._id, tempJob)
+                        .then(response => {
+                            console.log(tempJob);
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
+                })
+        }
         let nnumpos = +job.numpos + 1;
 
         const editApplicant = {

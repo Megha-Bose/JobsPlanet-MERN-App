@@ -38,7 +38,7 @@ create-react-app name_of_app
 npm start
 ```
 
-## Running the boilerplate
+## Run
 
 * Run Mongo daemon:
 ```
