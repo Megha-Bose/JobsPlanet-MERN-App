@@ -284,6 +284,7 @@ class AppList extends Component {
                     status: "Rejected"
                 }
                 let napp = +appliJob.numapp - 1;
+                if(napp < 0) napp = 0;
                 const editAppliJob = {
                     numapp: napp
                 }
@@ -306,7 +307,7 @@ class AppList extends Component {
             })
 
         this.props.history.push('/appList');
-        this.props.history.push('/appList');
+        this.props.history.push('/');
         this.props.history.goBack();
     }
 
@@ -317,6 +318,9 @@ class AppList extends Component {
         let job = this.getjob(application.jobId);
         let nnumapp = +applicant.numapp - 1;
         let jnumapp = +job.numapp - 1;
+
+        if(nnumapp < 0) nnumapp = 0;
+        if(jnumapp < 0) jnumapp = 0;
 
         const editApplicant = {
             numapp: nnumapp

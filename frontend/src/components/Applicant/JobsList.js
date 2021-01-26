@@ -351,9 +351,8 @@ class JobsList extends Component {
                 })
                 this.setState({ editting : "" });
             this.props.history.push('/jobsList');
-            this.props.history.push('/jobsList');
+            this.props.history.push('/');
             this.props.history.goBack();
-            window.location.reload();
         }
         else {
             alert("SOP cannot have more than 250 words.");

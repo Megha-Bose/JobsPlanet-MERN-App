@@ -101,6 +101,23 @@ class MyActiveJobs extends Component {
             .catch(function(error) {
                 console.log(error);
             })
+
+        applicationsArray.filter(item => item.jobId === id && item.status === "Accepted").forEach(
+            function(appli) 
+            {
+                const editEmployee = {
+                    working: false
+                }
+                axios
+                    .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editEmployee)
+                    .then(response => {
+                        console.log(editEmployee);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+            })
+    
         applicationsArray.filter(item => item.jobId === id).forEach(
             function(appli) 
             {
@@ -110,6 +127,7 @@ class MyActiveJobs extends Component {
                 if(applicant.working === false)
                 {
                     nnumapp = +nnumapp - 1;
+                    if(nnumapp < 0) nnumapp = 0;
                 }
 
                 const editApplicant = {
@@ -139,22 +157,7 @@ class MyActiveJobs extends Component {
                     })
             })
 
-        applicationsArray.filter(item => item.jobId === id && item.status === "Accepted").forEach(
-            function(appli) 
-            {
-                const editEmployee = {
-                    working: false
-                }
-                axios
-                    .put('http://localhost:4000/user/edit_profile/' + appli.applicantId, editEmployee)
-                    .then(response => {
-                        console.log(editEmployee);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    })
-            })
-
+        
         // to refresh
         this.props.history.push('/viewMyActiveJobs');
         this.props.history.push('/viewMyActiveJobs');
@@ -252,13 +255,13 @@ class MyActiveJobs extends Component {
                                     <TableRow>
                                             <TableCell>Title</TableCell>
                                             <TableCell>Date of posting</TableCell>
-                                            <TableCell>Number of Applicants</TableCell>
+                                            <TableCell>Number of Open Applications</TableCell>
                                             <TableCell>Remaining Number of Positions</TableCell>
                                             <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.jobs.filter(item => item.recruiter === userid).map((job,ind) => (
+                                    {this.state.jobs.filter(item => item.recruiter === userid && item.numpos < item.posmax).map((job,ind) => (
                                         <TableRow key={ind}>
                                             <TableCell>{job.title}</TableCell>
                                             <TableCell>{job.dateOfPost.substring(0,10)}</TableCell>
